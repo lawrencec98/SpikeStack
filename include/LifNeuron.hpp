@@ -2,6 +2,9 @@
 #define LIF_NEURON_HPP
 
 #include <chrono>
+#include <memory>
+#include <mutex>
+#include <vector>
 
 #include "INeuron.hpp"
 
@@ -32,7 +35,11 @@ struct LifNeuronInfo
     float vrest;
     float vthreshold;
     float vreset;
+    float vmin;
+    float vfiredSpike;
     float leakage_rate;
+    std::vector<std::shared_ptr<LifNeuron>> connectedNeurons;
+    std::chrono::duration<double> refactoryPeriod;
 };
 
 
@@ -43,10 +50,17 @@ public:
 
     ~LifNeuron();
 
-    void push_input(float spikeVoltage);
-    void fire();
+    void PushSpike(float spikeVoltage);
+    void Fire();
 
 private:
+
+    /*
+    @brief This function updates the instantaneous voltage of this neuron based on
+    time since last spike and leakage rate.
+    */
+    void UpdateInstantaneousVoltage();
+
     float m_vRest;
     float m_vThreshold;
     float m_vReset;
@@ -54,9 +68,17 @@ private:
 
     float m_leakageRate;
 
+    const float m_vMin;
+    const float m_vFiredSpike;
+
+    std::vector<std::shared_ptr<LifNeuron>> m_connectedNeurons;
+
     std::chrono::time_point<std::chrono::steady_clock> m_lastSpikeTime;
 
     std::chrono::duration<double> m_refactoryPeriod;
+
+    std::mutex m_mutexLastSpikeTime;
+    std::mutex m_mutexVInstantaneous;
 };
 
 #endif //LIF_NEURON_HPP
