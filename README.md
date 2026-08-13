@@ -12,6 +12,7 @@ An exploratory software stack for Neuromorphic computing
 * Neuromorphic compilers
 
 ## TODO List
+* Move away from linear voltageLeaked calculations. Follow a proper model for it.
 * Implement STDP
 * Do we apply synaptic weight at the fire() or pushinput()? OR, do we implement a synapse class which sits in between two neurons. (CHOOSING PUSHINPUT FOR NOW)
 * configuration file should hold min voltage, voltage of fired spike.
