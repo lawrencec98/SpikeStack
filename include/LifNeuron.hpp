@@ -38,7 +38,6 @@ struct LifNeuronInfo
     float vmin;
     float vfiredSpike;
     float leakage_rate;
-    std::vector<std::shared_ptr<LifNeuron>> connectedNeurons;
     std::chrono::duration<double> refactoryPeriod;
 };
 
@@ -50,11 +49,10 @@ public:
 
     ~LifNeuron();
 
-    void PushSpike(float spikeVoltage);
-    void Fire();
+    void PushSpike(float spikeVoltage) override;
+    void Fire() override;
 
 private:
-
     /*
     @brief This function updates the instantaneous voltage of this neuron based on
     time since last spike and leakage rate.
@@ -71,11 +69,12 @@ private:
     const float m_vMin;
     const float m_vFiredSpike;
 
-    std::vector<std::shared_ptr<LifNeuron>> m_connectedNeurons;
+    std::vector<std::shared_ptr<INeuron>> m_connectedNeurons;
 
     std::chrono::time_point<std::chrono::steady_clock> m_lastSpikeTime;
 
-    std::chrono::duration<double> m_refactoryPeriod;
+    const std::chrono::duration<double> m_refactoryPeriod;
+    std::chrono::time_point<std::chrono::steady_clock> m_refactoryPeriodStartTime;
 
     std::mutex m_mutexLastSpikeTime;
     std::mutex m_mutexVInstantaneous;

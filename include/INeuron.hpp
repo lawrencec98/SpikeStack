@@ -7,9 +7,9 @@ class INeuron
 public:
     virtual ~INeuron();
 
-    virtual void pushInput() = 0;
+    virtual void PushSpike(float spikeVoltage) = 0;
     
-    virtual void fire() = 0;
+    virtual void Fire() = 0;
 };
 
 

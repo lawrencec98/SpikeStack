@@ -10,7 +10,8 @@ LifNeuron::LifNeuron(LifNeuronInfo info)
         m_vMin(info.vmin),
         m_vFiredSpike(info.vfiredSpike),
         m_vInstantaneous(m_vRest), //Start off at rest
-        m_lastSpikeTime(std::chrono::steady_clock::now())
+        m_lastSpikeTime(std::chrono::steady_clock::now()),
+        m_refactoryPeriod(info.refactoryPeriod)
 {
     //TODO add config parsing.
 }
@@ -30,6 +31,12 @@ void LifNeuron::PushSpike(float spikeVoltage)
     // accumulate into m_vInstantaneous (note it can be +ve or -ve)
     LifNeuron::UpdateInstantaneousVoltage();
 
+    if (std::chrono::steady_clock::now() - m_refactoryPeriodStartTime < m_refactoryPeriod)
+    {
+        // do something
+        // make it harder for the incoming spike to have effect on m_vInstantaneous
+    }
+
     std::lock_guard<std::mutex> lockvInst(m_mutexVInstantaneous);
     m_vInstantaneous += spikeVoltage;
 
@@ -48,7 +55,7 @@ void LifNeuron::PushSpike(float spikeVoltage)
 void LifNeuron::Fire(/*destination neuron*/)
 {
     // send a spike to all? or some? connected neurons
-    float spikeV = 0.5; // TODO CHANGE ME
+    float spikeV = 1; // TODO CHANGE ME
     
     for (auto& it : m_connectedNeurons)
     {
@@ -56,7 +63,7 @@ void LifNeuron::Fire(/*destination neuron*/)
     }
 
     m_vInstantaneous = m_vReset;
-    // TODO start the vRefactoryPeriod countdown
+    m_refactoryPeriodStartTime = std::chrono::steady_clock::now();
 }
 
 
