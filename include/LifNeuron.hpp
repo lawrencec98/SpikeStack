@@ -48,6 +48,8 @@ class LifNeuron : public INeuron
 {
 public:
     LifNeuron(LifNeuronInfo info);
+    LifNeuron(const LifNeuron&) = delete;
+    LifNeuron& operator=(const LifNeuron&) = delete;
 
     ~LifNeuron();
 

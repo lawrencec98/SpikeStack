@@ -28,3 +28,11 @@ target_sources(test_LifNeuron
     PRIVATE
         test/test_LifNeuron.cpp
 )
+
+
+add_executable(main samples/main.cpp)
+target_link_libraries(main PRIVATE spikestack)
+target_sources(main
+    PRIVATE
+        samples/main.cpp
+)

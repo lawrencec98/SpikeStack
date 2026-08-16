@@ -1,10 +1,11 @@
+#include <iostream>
+
 #include "LifNeuron.hpp"
 
 int main()
 {
-
     LifNeuronInfo info;
-    info.leakage_rate = 0.25;
+    info.leakageRate = 0.25;
     info.refactoryPeriod = std::chrono::milliseconds(10);
     info.vfiredSpike = 0.05;
     info.vmin = -1;
@@ -12,14 +13,14 @@ int main()
     info.vreset = -0.65;
     info.vthreshold = -0.5;
 
-    std::vector<LifNeuron> myNeurons;
+    std::vector<std::unique_ptr<LifNeuron>> myNeurons;
 
     for (int i = 0; i < 100; i++)
     {
-        LifNeuron neur(info);
-        myNeurons.push_back(neur); 
+        myNeurons.push_back(std::move(std::make_unique<LifNeuron>(info))); 
     }
 
+    std::cout << "Hello world" << std::endl;
 
     /*
         A  B  C  D
