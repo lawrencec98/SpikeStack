@@ -2,8 +2,11 @@ cmake_minimum_required(VERSION 3.2)
 
 project (SpikeStack)
 
-add_library(spikestack SHARED)
+add_subdirectory("submodules/googletest")
 
+# Build config for spikestack library
+add_library(spikestack SHARED)
+target_include_directories(spikestack PUBLIC include)
 target_sources(spikestack
     PRIVATE
         src/LifNeuron.cpp
@@ -15,4 +18,13 @@ target_sources(spikestack
             include
         FILES
             include/LifNeuron.hpp
+)
+
+
+# Build info for test_LifNeuron
+add_executable(test_LifNeuron test/test_LifNeuron.cpp)
+target_link_libraries(test_LifNeuron PRIVATE GTest::gtest_main spikestack)
+target_sources(test_LifNeuron
+    PRIVATE
+        test/test_LifNeuron.cpp
 )

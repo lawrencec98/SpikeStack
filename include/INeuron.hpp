@@ -5,7 +5,7 @@
 class INeuron
 {
 public:
-    virtual ~INeuron();
+    virtual ~INeuron() = default;
 
     virtual void PushSpike(float spikeVoltage) = 0;
     
