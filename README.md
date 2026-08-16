@@ -44,11 +44,14 @@ PSP decays over time, with the voltage tending towards resting - the rate of thi
 * Neuromorphic compilers
 
 ### TODO List
+#### Neuromorphic implementation
 * Move away from linear voltageLeaked calculations. Follow a proper model for it.
 * Implement STDP
 * Do we apply synaptic weight at the fire() or pushinput()? OR, do we implement a synapse class which sits in between two neurons. (CHOOSING PUSHINPUT FOR NOW)
-* configuration file should hold min voltage, voltage of fired spike.
 
+#### Project infrastructure
+* Look into making the unit tests dir its own cmake subdirectory, so that it can build on its own. And then have flag in main project cmake that determines whether we build tests or not.
+* configuration file should hold min voltage, voltage of fired spike.
 
 # References
 * https://neuromorphiccore.ai/

@@ -3,7 +3,7 @@
 
 
 LifNeuron::LifNeuron(LifNeuronInfo info)
-    :   m_leakageRate(info.leakage_rate),
+    :   m_leakageRate(info.leakageRate),
         m_vRest(info.vrest),
         m_vThreshold(info.vthreshold),
         m_vReset(info.vreset),

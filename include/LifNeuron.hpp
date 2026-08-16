@@ -38,7 +38,7 @@ struct LifNeuronInfo
     float vmin;
     float vmax;
     float vfiredSpike;
-    float leakage_rate;
+    float leakageRate;
     std::chrono::duration<double> refactoryPeriod;
 };
 

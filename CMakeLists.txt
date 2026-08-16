@@ -23,7 +23,7 @@ target_sources(spikestack
 
 # Build info for test_LifNeuron
 add_executable(test_LifNeuron test/test_LifNeuron.cpp)
-target_link_libraries(test_LifNeuron PRIVATE GTest::gtest_main spikestack)
+target_link_libraries(test_LifNeuron PRIVATE GTest::gtest_main GTest::gmock_main spikestack)
 target_sources(test_LifNeuron
     PRIVATE
         test/test_LifNeuron.cpp
