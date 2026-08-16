@@ -8,6 +8,7 @@ int main()
     info.refactoryPeriod = std::chrono::milliseconds(10);
     info.vfiredSpike = 0.05;
     info.vmin = -1;
+    info.vmin = 2;
     info.vreset = -0.65;
     info.vthreshold = -0.5;
 

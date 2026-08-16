@@ -8,6 +8,7 @@ LifNeuron::LifNeuron(LifNeuronInfo info)
         m_vThreshold(info.vthreshold),
         m_vReset(info.vreset),
         m_vMin(info.vmin),
+        m_vMax(info.vmax),
         m_vFiredSpike(info.vfiredSpike),
         m_vInstantaneous(m_vRest), //Start off at rest
         m_lastSpikeTime(std::chrono::steady_clock::now()),
@@ -29,6 +30,7 @@ LifNeuron::~LifNeuron()
 void LifNeuron::PushSpike(float spikeVoltage)
 {
     // accumulate into m_vInstantaneous (note it can be +ve or -ve)
+    // TODO: if tElapsedSinceLastSpike > time_constant : just skip the accumulation bit.
     LifNeuron::UpdateInstantaneousVoltage();
 
     if (std::chrono::steady_clock::now() - m_refactoryPeriodStartTime < m_refactoryPeriod)
@@ -86,4 +88,46 @@ void LifNeuron::UpdateInstantaneousVoltage()
         float vInst = m_vInstantaneous - voltageLeaked;
         m_vInstantaneous = std::max(m_vMin, vInst);
     }
+}
+
+
+float LifNeuron::GetVoltageRest() const
+{
+    return m_vRest;
+}
+
+float LifNeuron::GetVoltageThreshold() const
+{
+    return m_vThreshold;
+}
+
+float LifNeuron::GetVoltageReset() const
+{
+    return m_vReset;
+}
+
+float LifNeuron::GetVoltageInstantaneous() const
+{
+    std::lock_guard<std::mutex> lock(m_mutexVInstantaneous);
+    return m_vInstantaneous;
+}
+
+float LifNeuron::GetLeakageRate() const
+{
+    return m_leakageRate;
+}
+
+float LifNeuron::GetVoltageMin() const
+{
+    return m_vMin;
+}
+
+float LifNeuron::GetVoltageMax() const
+{
+    return m_vMax;
+}
+
+std::chrono::duration<double> LifNeuron::GetVoltageRefactoryPeriod() const
+{
+    return m_refactoryPeriod;
 }
