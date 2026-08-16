@@ -1,7 +1,6 @@
 #include "LifNeuron.hpp"
 
 
-
 LifNeuron::LifNeuron(LifNeuronInfo info)
     :   m_leakageRate(info.leakageRate),
         m_vRest(info.vrest),
@@ -27,7 +26,7 @@ LifNeuron::~LifNeuron()
 /**
  * This input signal is 'digital', scaled by the synaptic weight.
  */
-void LifNeuron::PushSpike(float spikeVoltage)
+void LifNeuron::PushSpike(spike::Spike spike)
 {
     // accumulate into m_vInstantaneous (note it can be +ve or -ve)
     // TODO: if tElapsedSinceLastSpike > time_constant : just skip the accumulation bit.
@@ -40,7 +39,8 @@ void LifNeuron::PushSpike(float spikeVoltage)
     }
 
     std::lock_guard<std::mutex> lockvInst(m_mutexVInstantaneous);
-    m_vInstantaneous += spikeVoltage;
+    // need to calculate spikevoltage based on weight. spike.polarity * weight
+    m_vInstantaneous += spike.polarity; // TODO CHANGE ME TO BE BASED ON WEIGHTS.;
 
     if (m_vInstantaneous >= m_vThreshold)
     {
@@ -56,12 +56,17 @@ void LifNeuron::PushSpike(float spikeVoltage)
 
 void LifNeuron::Fire(/*destination neuron*/)
 {
+    // TODO CHANGE ALL OF THIS BIT.
     // send a spike to all? or some? connected neurons
-    float spikeV = 1; // TODO CHANGE ME
+    spike::Spike spike;
+    spike.polarity = spike::positive; // TODO CHANGE ME: how to determine polarity?
+    spike.timestamp = std::chrono::steady_clock::now();
+    spike.x = 0;
+    spike.y = 0;
     
     for (auto& it : m_connectedNeurons)
     {
-        it->PushSpike(spikeV);
+        it->PushSpike(spike);
     }
 
     m_vInstantaneous = m_vReset;

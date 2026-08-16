@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "INeuron.hpp"
+#include "Spike.hpp"
 
 
 /*
@@ -50,7 +51,7 @@ public:
 
     ~LifNeuron();
 
-    void PushSpike(float spikeVoltage) override;
+    void PushSpike(spike::Spike spike) override;
     void Fire() override;
 
     float GetVoltageRest() const;
