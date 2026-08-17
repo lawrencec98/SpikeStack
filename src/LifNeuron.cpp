@@ -11,7 +11,8 @@ LifNeuron::LifNeuron(LifNeuronInfo info)
         m_vFiredSpike(info.vfiredSpike),
         m_vInstantaneous(m_vRest), //Start off at rest
         m_lastSpikeTime(std::chrono::steady_clock::now()),
-        m_refactoryPeriod(info.refactoryPeriod)
+        m_refactoryPeriod(info.refactoryPeriod),
+        m_refactoryPeriodStartTime(std::chrono::steady_clock::time_point::max())
 {
     //TODO add config parsing.
 }
@@ -40,6 +41,7 @@ void LifNeuron::PushSpike(spike::Spike spike)
 
     std::lock_guard<std::mutex> lockvInst(m_mutexVInstantaneous);
     // need to calculate spikevoltage based on weight. spike.polarity * weight
+    float spikeVoltage = LifNeuron::CalculateSpikeVoltage();
     m_vInstantaneous += spike.polarity; // TODO CHANGE ME TO BE BASED ON WEIGHTS.;
 
     if (m_vInstantaneous >= m_vThreshold)

@@ -46,4 +46,7 @@ TEST_F(Fixture_LifNeuron, PushSpike_positive)
     ASSERT_THAT(neuron->GetVoltageInstantaneous(), AllOf(Ge(-0.71), Le(-0.6999))); //Should be eq to v_rest
 
     // TODO
+
+    spike::Spike spike{0, 0, spike::Polarity::positive, std::chrono::steady_clock::now()};
+    neuron->PushSpike(spike);
 }

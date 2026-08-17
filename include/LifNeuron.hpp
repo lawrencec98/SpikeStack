@@ -67,11 +67,16 @@ public:
 
 
 private:
-    /*
-    @brief This function updates the instantaneous voltage of this neuron based on
-    time since last spike and leakage rate.
-    */
+    /**
+     * @brief This function updates the instantaneous voltage of this neuron based on
+     * time since last spike and leakage rate.
+     */
     void UpdateInstantaneousVoltage();
+
+    /**
+     * @brief This function returns the voltage of a spike, which is determined by the spike's polarity and synaptic weight.
+     */
+    float CalculateSpikeVoltage();
 
     float m_vRest;
     float m_vThreshold;
@@ -85,6 +90,7 @@ private:
     const float m_vFiredSpike;
 
     std::vector<std::shared_ptr<INeuron>> m_connectedNeurons;
+    std::vector<float> m_synapticWeights; // Strength of the connection between this neuron and its synaptic pairs.
 
     std::chrono::time_point<std::chrono::steady_clock> m_lastSpikeTime;
 
