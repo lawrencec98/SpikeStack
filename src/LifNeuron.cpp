@@ -3,15 +3,15 @@
 
 LifNeuron::LifNeuron(LifNeuronInfo info)
     :   m_leakageRate(info.leakageRate),
+        m_timeConstant(1/m_leakageRate),
         m_vRest(info.vrest),
         m_vThreshold(info.vthreshold),
         m_vReset(info.vreset),
         m_vMin(info.vmin),
         m_vMax(info.vmax),
-        m_vFiredSpike(info.vfiredSpike),
         m_vInstantaneous(m_vRest), //Start off at rest
         m_lastSpikeTime(std::chrono::steady_clock::now()),
-        m_refactoryPeriod(info.refactoryPeriod),
+        m_absoluteRefactoryPeriod(info.absoluteRefactoryPeriod),
         m_refactoryPeriodStartTime(std::chrono::steady_clock::time_point::max())
 {
     //TODO add config parsing.
@@ -25,28 +25,26 @@ LifNeuron::~LifNeuron()
 
 
 /**
- * This input signal is 'digital', scaled by the synaptic weight.
+ * @brief Accumulates incoming spikes into m_vInstantaneous (note it can be +ve or -ve),
+ * factoring in synaptic weights. Then decides whether we should fire a neuron based on v_thresh.
+ * @param spike [in] - An incoming spike sent by another neuron
  */
 void LifNeuron::PushSpike(spike::Spike spike)
 {
-    // accumulate into m_vInstantaneous (note it can be +ve or -ve)
-    // TODO: if tElapsedSinceLastSpike > time_constant : just skip the accumulation bit.
-    LifNeuron::UpdateInstantaneousVoltage();
-
-    if (std::chrono::steady_clock::now() - m_refactoryPeriodStartTime < m_refactoryPeriod)
-    {
-        // do something
-        // make it harder for the incoming spike to have effect on m_vInstantaneous
-    }
+    LifNeuron::UpdateInstantaneousVoltage(); //Call UpdateInstantaneousVoltage because we need have no updated the value of m_InstantaneousVoltage since the last PushSpike event on this neuron.
 
     std::lock_guard<std::mutex> lockvInst(m_mutexVInstantaneous);
-    // need to calculate spikevoltage based on weight. spike.polarity * weight
-    float spikeVoltage = LifNeuron::CalculateSpikeVoltage();
-    m_vInstantaneous += spike.polarity; // TODO CHANGE ME TO BE BASED ON WEIGHTS.;
+
+    bool isPositive = (spike.polarity == spike::Polarity::positive);
+    float spikeVoltage = LifNeuron::CalculateSpikeVoltage(isPositive);
+    m_vInstantaneous += spikeVoltage;
 
     if (m_vInstantaneous >= m_vThreshold)
     {
-        LifNeuron::Fire();
+        if (!(std::chrono::steady_clock::now() - m_refactoryPeriodStartTime < m_absoluteRefactoryPeriod)) // If we were still within abs refactory period we would skip firing this spike.
+        {
+            LifNeuron::Fire();
+        }
     }
 
     {
@@ -56,12 +54,11 @@ void LifNeuron::PushSpike(spike::Spike spike)
 }
 
 
-void LifNeuron::Fire(/*destination neuron*/)
+void LifNeuron::Fire() //Send a spike to all? or some? connected neurons
 {
-    // TODO CHANGE ALL OF THIS BIT.
-    // send a spike to all? or some? connected neurons
+    //TODO CHANGE ALL OF THIS BIT.
     spike::Spike spike;
-    spike.polarity = spike::positive; // TODO CHANGE ME: how to determine polarity?
+    spike.polarity = spike::Polarity::positive; // how do we decide if the outgoing spike should be positive or negative?
     spike.timestamp = std::chrono::steady_clock::now();
     spike.x = 0;
     spike.y = 0;
@@ -95,6 +92,12 @@ void LifNeuron::UpdateInstantaneousVoltage()
         float vInst = m_vInstantaneous - voltageLeaked;
         m_vInstantaneous = std::max(m_vMin, vInst);
     }
+}
+
+
+float LifNeuron::CalculateSpikeVoltage(bool isPositive)
+{
+    // TODO
 }
 
 
@@ -136,5 +139,5 @@ float LifNeuron::GetVoltageMax() const
 
 std::chrono::duration<double> LifNeuron::GetVoltageRefactoryPeriod() const
 {
-    return m_refactoryPeriod;
+    return m_absoluteRefactoryPeriod;
 }

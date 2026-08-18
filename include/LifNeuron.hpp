@@ -38,9 +38,8 @@ struct LifNeuronInfo
     float vreset;
     float vmin;
     float vmax;
-    float vfiredSpike;
     float leakageRate;
-    std::chrono::duration<double> refactoryPeriod;
+    std::chrono::duration<double> absoluteRefactoryPeriod;
 };
 
 
@@ -76,25 +75,25 @@ private:
     /**
      * @brief This function returns the voltage of a spike, which is determined by the spike's polarity and synaptic weight.
      */
-    float CalculateSpikeVoltage();
+    float CalculateSpikeVoltage(bool isPositve);
 
-    float m_vRest;
-    float m_vThreshold;
-    float m_vReset;
-    float m_vInstantaneous;
+    float m_vRest; //unit: mV
+    float m_vThreshold; //unit: mV
+    float m_vReset; //unit: mV
+    float m_vInstantaneous; //unit: mV
 
-    float m_leakageRate;
+    float m_leakageRate; //unit: mV/ms
+    float m_timeConstant; //unit: ms
 
-    const float m_vMin; // Should this be const?
-    const float m_vMax; // Should this be const?
-    const float m_vFiredSpike;
+    const float m_vMin; //Should this be const?
+    const float m_vMax; //Should this be const?
 
     std::vector<std::shared_ptr<INeuron>> m_connectedNeurons;
     std::vector<float> m_synapticWeights; // Strength of the connection between this neuron and its synaptic pairs.
 
     std::chrono::time_point<std::chrono::steady_clock> m_lastSpikeTime;
 
-    const std::chrono::duration<double> m_refactoryPeriod;
+    const std::chrono::duration<double> m_absoluteRefactoryPeriod; // We are simplifying things by only implementing abs refactory period, and not relative factory periods.
     std::chrono::time_point<std::chrono::steady_clock> m_refactoryPeriodStartTime;
 
     mutable std::mutex m_mutexLastSpikeTime;

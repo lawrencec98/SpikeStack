@@ -9,7 +9,7 @@ class INeuron
 public:
     virtual ~INeuron() = default;
 
-    virtual void PushSpike(spike::Spike spikeVoltage) = 0;
+    virtual void PushSpike(spike::Spike spike) = 0;
     
     virtual void Fire() = 0;
 };
