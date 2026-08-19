@@ -33,12 +33,13 @@ Output:
 
 struct LifNeuronInfo
 {
-    float vrest;
-    float vthreshold;
-    float vreset;
-    float vmin;
-    float vmax;
+    float vrest = -65.0;
+    float vthreshold = -60.0;
+    float vreset = -75.0;
+    float vmin = -1.0;
+    float vmax = 1.0;
     float leakageRate;
+    float vSpike = 100;
     std::chrono::duration<double> absoluteRefactoryPeriod;
 };
 
@@ -79,23 +80,25 @@ private:
 
     long int m_neuronId;
 
-    float m_vRest; //unit: mV
-    float m_vThreshold; //unit: mV
-    float m_vReset; //unit: mV
-    float m_vInstantaneous; //unit: mV
+    float m_vRest = -65.0 ; //[mV]
+    float m_vThreshold = -60.0; //[mV]
+    float m_vReset = -75.0; //[mV]
+    float m_vInstantaneous; //[mV]
 
-    float m_leakageRate; //unit: mV/ms
-    float m_timeConstant; //unit: ms
+    float m_leakageRate; //[mV/ms]
+    float m_timeConstant; //[ms]
 
-    const float m_vMin; //Should this be const?
-    const float m_vMax; //Should this be const?
+    const float m_vMin = -1.0; //Should this be const?
+    const float m_vMax = 1.0; //Should this be const?
+
+    const float m_vSpike = 100; //[mV]
 
     std::vector<std::shared_ptr<INeuron>> m_connectedNeurons;
     std::vector<float> m_synapticWeights; // Strength of the connection between this neuron and its synaptic pairs.
 
     std::chrono::time_point<std::chrono::steady_clock> m_lastSpikeTime;
 
-    const std::chrono::duration<double> m_absoluteRefactoryPeriod; // We are simplifying things by only implementing abs refactory period, and not relative factory periods.
+    const std::chrono::duration<double> m_absoluteRefactoryPeriod = std::chrono::duration<double>(2); // We are simplifying things by only implementing abs refactory period, and not relative factory periods.
     std::chrono::time_point<std::chrono::steady_clock> m_refactoryPeriodStartTime;
 
     mutable std::mutex m_mutexLastSpikeTime;

@@ -9,6 +9,7 @@ LifNeuron::LifNeuron(LifNeuronInfo info)
         m_vReset(info.vreset),
         m_vMin(info.vmin),
         m_vMax(info.vmax),
+        m_vSpike(info.vSpike),
         m_vInstantaneous(m_vRest), //Start off at rest
         m_lastSpikeTime(std::chrono::steady_clock::now()),
         m_absoluteRefactoryPeriod(info.absoluteRefactoryPeriod),
@@ -50,10 +51,7 @@ void LifNeuron::PushSpike(spike::Spike spike)
         }
     }
 
-    {
-        std::lock_guard<std::mutex> lockLastSpikeTime(m_mutexLastSpikeTime);
-        m_lastSpikeTime = std::chrono::steady_clock::now();
-    }
+    m_lastSpikeTime = std::chrono::steady_clock::now();
 }
 
 
@@ -92,6 +90,7 @@ void LifNeuron::UpdateInstantaneousVoltageOnPushSpike()
 float LifNeuron::CalculateSpikeVoltage(bool isPositive)
 {
     // TODO
+    return 0;
 }
 
 

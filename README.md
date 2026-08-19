@@ -1,6 +1,7 @@
 # SpikeStack
 An exploratory software stack for Neuromorphic computing
 
+This project includes an implementation of a Leaky-Integrate-and-Fire Neuron, and a simple SNN simulator. The SNN simulator is an event-based simulator as opposed to a more common 'cycle-based' approach. Thus the simulator is potentially more efficient for sparse simulations, and less computationally expensive... at the cost of non determinism 😱 !
 
 ## How biological neurons work
 ### Main parts of a neuron:
@@ -52,6 +53,8 @@ PSP decays over time, with the voltage tending towards resting - the rate of thi
 #### Project infrastructure
 * Look into making the unit tests dir its own cmake subdirectory, so that it can build on its own. And then have flag in main project cmake that determines whether we build tests or not.
 * configuration file should hold min voltage, voltage of fired spike.
+* Make sure to explicitly 'type' the std::chrono time units - i.e. std::milli
+* Look into implementing a wrapper class for std::chrono::steady_clock so that we can control time.
 
 # References
 * https://neuromorphiccore.ai/

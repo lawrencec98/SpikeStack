@@ -6,8 +6,8 @@ int main()
 {
     LifNeuronInfo info;
     info.leakageRate = 0.25;
-    info.refactoryPeriod = std::chrono::milliseconds(10);
-    info.vfiredSpike = 0.05;
+    info.absoluteRefactoryPeriod = std::chrono::milliseconds(10);
+    info.vSpike = 0.05;
     info.vmin = -1;
     info.vmin = 2;
     info.vreset = -0.65;
