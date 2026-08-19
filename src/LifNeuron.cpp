@@ -31,13 +31,16 @@ LifNeuron::~LifNeuron()
  */
 void LifNeuron::PushSpike(spike::Spike spike)
 {
-    LifNeuron::UpdateInstantaneousVoltage(); //Call UpdateInstantaneousVoltage because we need have no updated the value of m_InstantaneousVoltage since the last PushSpike event on this neuron.
+    LifNeuron::UpdateInstantaneousVoltageOnPushSpike(); //because we have not updated the value of m_InstantaneousVoltage since the last PushSpike event on this neuron.
 
     std::lock_guard<std::mutex> lockvInst(m_mutexVInstantaneous);
+    std::lock_guard<std::mutex> lockLastSpikeTime(m_mutexLastSpikeTime);
 
     bool isPositive = (spike.polarity == spike::Polarity::positive);
     float spikeVoltage = LifNeuron::CalculateSpikeVoltage(isPositive);
-    m_vInstantaneous += spikeVoltage;
+    float newVInst = m_vInstantaneous + spikeVoltage;
+
+    m_vInstantaneous = std::min(m_vMax, newVInst); // Make sure we don't go past max voltage.
 
     if (m_vInstantaneous >= m_vThreshold)
     {
@@ -72,25 +75,17 @@ void LifNeuron::Fire() //Send a spike to all? or some? connected neurons
 }
 
 
-void LifNeuron::UpdateInstantaneousVoltage()
+void LifNeuron::UpdateInstantaneousVoltageOnPushSpike()
 {
-    std::chrono::steady_clock::time_point tNow = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::duration tElapsedSinceLastSpike = std::chrono::steady_clock::now() - m_lastSpikeTime;
 
-    std::chrono::steady_clock::duration tElapsedSinceLastSpike;
-    {
-        std::lock_guard<std::mutex> lockLastSpikeTime(m_mutexLastSpikeTime);
-        tElapsedSinceLastSpike = tNow - m_lastSpikeTime;
-    }
-    
     float tElapsedFloat = std::chrono::steady_clock::duration(tElapsedSinceLastSpike).count();
 
-    float voltageLeaked = tElapsedFloat * m_leakageRate;
+    float voltageLeaked = tElapsedFloat * m_leakageRate; // linear leakage model.
 
-    {
-        std::lock_guard<std::mutex> lockvInst(m_mutexVInstantaneous);
-        float vInst = m_vInstantaneous - voltageLeaked;
-        m_vInstantaneous = std::max(m_vMin, vInst);
-    }
+    float newVInst = m_vInstantaneous - voltageLeaked;
+
+    m_vInstantaneous = std::max(m_vMin, newVInst);
 }
 
 

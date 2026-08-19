@@ -70,7 +70,7 @@ private:
      * @brief This function updates the instantaneous voltage of this neuron based on
      * time since last spike and leakage rate.
      */
-    void UpdateInstantaneousVoltage();
+    void UpdateInstantaneousVoltageOnPushSpike();
 
     /**
      * @brief This function returns the voltage of a spike, which is determined by the spike's polarity and synaptic weight.
