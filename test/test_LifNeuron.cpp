@@ -17,9 +17,8 @@ protected:
         info.vreset = -0.5;
         info.vmin = -1.0;
         info.vmax = 1.0;
-        info.vfiredSpike = 0.1;
         info.leakageRate = 0.2;
-        info.refactoryPeriod = std::chrono::duration<double>(10.0);
+        info.absoluteRefactoryPeriod = std::chrono::duration<double>(10.0);
 
         neuron = std::make_shared<LifNeuron>(info);
     }
@@ -47,6 +46,6 @@ TEST_F(Fixture_LifNeuron, PushSpike_positive)
 
     // TODO
 
-    spike::Spike spike{0, 0, spike::Polarity::positive, std::chrono::steady_clock::now()};
+    spike::Spike spike{0, spike::Polarity::positive, std::chrono::steady_clock::now()};
     neuron->PushSpike(spike);
 }

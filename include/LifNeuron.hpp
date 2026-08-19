@@ -77,6 +77,8 @@ private:
      */
     float CalculateSpikeVoltage(bool isPositve);
 
+    long int m_neuronId;
+
     float m_vRest; //unit: mV
     float m_vThreshold; //unit: mV
     float m_vReset; //unit: mV

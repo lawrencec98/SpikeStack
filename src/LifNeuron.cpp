@@ -60,8 +60,7 @@ void LifNeuron::Fire() //Send a spike to all? or some? connected neurons
     spike::Spike spike;
     spike.polarity = spike::Polarity::positive; // how do we decide if the outgoing spike should be positive or negative?
     spike.timestamp = std::chrono::steady_clock::now();
-    spike.x = 0;
-    spike.y = 0;
+    spike.source_id = m_neuronId;
     
     for (auto& it : m_connectedNeurons)
     {
