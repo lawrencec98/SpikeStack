@@ -47,7 +47,7 @@ struct LifNeuronInfo
 class LifNeuron : public INeuron
 {
 public:
-    LifNeuron(LifNeuronInfo info);
+    LifNeuron(LifNeuronInfo info, std::vector<float> neuronAdjMatrix);
     LifNeuron(const LifNeuron&) = delete;
     LifNeuron& operator=(const LifNeuron&) = delete;
 

@@ -1,7 +1,7 @@
 #include "LifNeuron.hpp"
 
 
-LifNeuron::LifNeuron(LifNeuronInfo info)
+LifNeuron::LifNeuron(LifNeuronInfo info, std::vector<float> neuronAdjMatrix)
     :   m_leakageRate(info.leakageRate),
         m_timeConstant(1/m_leakageRate),
         m_vRest(info.vrest),
@@ -16,6 +16,9 @@ LifNeuron::LifNeuron(LifNeuronInfo info)
         m_refactoryPeriodStartTime(std::chrono::steady_clock::time_point::max())
 {
     //TODO add config parsing.
+
+    // TODO, use the neuronAdjacencyMatrix to populate m_connectedNeurons.
+
 }
 
 
@@ -57,6 +60,9 @@ void LifNeuron::PushSpike(spike::Spike spike)
 
 void LifNeuron::Fire() //Send a spike to all? or some? connected neurons
 {
+    // TODO: Note that neurons can connect to themself. We need to make sure that a neuron doesn't
+    // recursively call Fire on itself forever.
+
     //TODO CHANGE ALL OF THIS BIT.
     spike::Spike spike;
     spike.polarity = spike::Polarity::positive; // how do we decide if the outgoing spike should be positive or negative?
@@ -90,7 +96,11 @@ void LifNeuron::UpdateInstantaneousVoltageOnPushSpike()
 float LifNeuron::CalculateSpikeVoltage(bool isPositive)
 {
     // TODO
-    return 0;
+    // Look into CSR - compressed sparse row. (save all col ids, save all values, only save row ptrs)
+
+    //float weight = m_connectedNeurons & m_synapticWeights;
+
+    //float result = m_vSpike * weight;
 }
 
 
