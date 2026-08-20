@@ -20,7 +20,8 @@ protected:
         info.leakageRate = 0.2;
         info.absoluteRefactoryPeriod = std::chrono::duration<double>(10.0);
 
-        neuron = std::make_shared<LifNeuron>(info);
+        std::vector<float> adj;
+        neuron = std::make_shared<LifNeuron>(info,adj);
     }
 
     LifNeuronInfo info;

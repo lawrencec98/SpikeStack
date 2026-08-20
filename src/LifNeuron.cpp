@@ -101,6 +101,7 @@ float LifNeuron::CalculateSpikeVoltage(bool isPositive)
     //float weight = m_connectedNeurons & m_synapticWeights;
 
     //float result = m_vSpike * weight;
+    return 0;
 }
 
 

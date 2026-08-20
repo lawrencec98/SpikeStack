@@ -14,10 +14,11 @@ int main()
     info.vthreshold = -0.5;
 
     std::vector<std::unique_ptr<LifNeuron>> myNeurons;
+    std::vector<float> adj;
 
     for (int i = 0; i < 100; i++)
     {
-        myNeurons.push_back(std::move(std::make_unique<LifNeuron>(info))); 
+        myNeurons.push_back(std::move(std::make_unique<LifNeuron>(info, adj))); 
     }
 
     std::cout << "Hello world" << std::endl;
