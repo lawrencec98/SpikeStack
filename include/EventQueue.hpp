@@ -20,7 +20,7 @@ namespace spikestack
         event PopEvent();
 
     private:
-        std::priority_queue<event> m_queue;
+        std::priority_queue<std::shared_ptr<event>> m_queue;
         mutable std::mutex m_queueMutex;
     };
 }

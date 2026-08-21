@@ -22,8 +22,13 @@ namespace spike
     {
         long int source_id;
         spike::Polarity polarity;
-        double timestamp;
+        double occ_time; // The point at which the neuron exceeded v_threshold.
+        double delivered_time; // This factors in synaptic delay.
     };
+
+
+    typedef std::shared_ptr<Spike> Spike_sp;
+    typedef std::shared_ptr<InputSpike> InputSpike_sp;
 }
 
 #endif // SPIKE_HPP

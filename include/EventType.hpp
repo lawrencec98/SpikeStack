@@ -7,7 +7,7 @@ namespace spikestack
 
     enum EventType
     {
-        spike
+        Spike
     };
 
 

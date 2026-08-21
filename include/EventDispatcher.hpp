@@ -14,9 +14,14 @@ public:
     void Push(spikestack::Event);
 
 private:
+    spikestack::Event_sp PopFromEventQueue();
+
+    void ProcessEvent(spikestack::Event event);
+
+    void ProcessSpike();
     double m_currentSimTime;
 
-    std::shared_ptr<spikestack::EventQueue<spikestack::Event>> m_queue;
+    std::shared_ptr<spikestack::EventQueue<spikestack::Event_sp>> m_queue;
     std::vector<std::shared_ptr<INeuron>> m_neurons;
 };
 

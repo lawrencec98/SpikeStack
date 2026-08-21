@@ -13,9 +13,11 @@ namespace spikestack
     struct Event
     {
         spikestack::EventType type;
-        double timestamp;
+        double occurence_timestamp;
         std::shared_ptr<INeuron> destination;
     };
+
+    typedef std::shared_ptr<Event> Event_sp;
 
 } //namespace spikestack
 

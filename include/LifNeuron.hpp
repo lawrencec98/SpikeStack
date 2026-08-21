@@ -55,7 +55,14 @@ public:
 
     ~LifNeuron();
 
+    /**
+     * @brief Processes an incoming spike and updates internal states of this neuron.
+     */
     void PushSpike(spike::Spike spike, double current_simtime) override;
+    
+    /**
+     * @brief Prepares a spike then pushes it to the EventQueue.
+     */
     void Fire(double sim_time) override;
 
     float GetVoltageRest() const;
@@ -76,7 +83,7 @@ private:
     void SimulateLeakedVoltage(double sim_time);
 
     /**
-     * @brief This function returns the voltage of a spike, which is determined by the spike's polarity and synaptic weight.
+     * @brief TODO: This function returns the voltage of a spike, which is determined by the spike's polarity and synaptic weight.
      */
     float CalculateSpikeVoltage(bool isPositve);
 
@@ -104,9 +111,6 @@ private:
 
     const double m_absoluteRefactoryPeriod = 2; // We are simplifying things by only implementing abs refactory period, and not relative factory periods.
     double m_refactoryPeriodStartTime;
-
-    mutable std::mutex m_mutexLastSpikeTime;
-    mutable std::mutex m_mutexVInstantaneous;
 };
 
 #endif //LIF_NEURON_HPP

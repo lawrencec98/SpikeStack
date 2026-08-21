@@ -36,12 +36,7 @@ LifNeuron::~LifNeuron()
  */
 void LifNeuron::PushSpike(spike::Spike spike, double current_simtime)
 {
-    double sim_time = spike.timestamp;
-
     LifNeuron::SimulateLeakedVoltage(current_simtime); //because we have not updated the value of m_InstantaneousVoltage since the last PushSpike event on this neuron.
-
-    std::lock_guard<std::mutex> lockvInst(m_mutexVInstantaneous);
-    std::lock_guard<std::mutex> lockLastSpikeTime(m_mutexLastSpikeTime);
 
     bool isPositive = (spike.polarity == spike::Polarity::positive);
     float spikeVoltage = LifNeuron::CalculateSpikeVoltage(isPositive);
@@ -61,22 +56,22 @@ void LifNeuron::PushSpike(spike::Spike spike, double current_simtime)
 }
 
 
-void LifNeuron::Fire(double current_sim_time) //Send a spike to all? or some? connected neurons
+void LifNeuron::Fire(double current_sim_time)
 {
     // TODO: Note that neurons can connect to themself. We need to make sure that a neuron doesn't
     // recursively call Fire on itself forever.
 
-    //TODO CHANGE ALL OF THIS BIT.
     spike::Spike spike;
     spike.polarity = spike::Polarity::positive; // how do we decide if the outgoing spike should be positive or negative?
-    spike.timestamp = current_sim_time;
+    spike.occ_time = current_sim_time;
+    spike.delivered_time = spike.occ_time; // TODO figure out how to represent synaptic delay.
     spike.source_id = m_neuronId;
     
     for (auto& it : m_connectedNeurons)
     {
         spikestack::Event event;
-        event.timestamp = current_sim_time;
-        event.type = spikestack::EventType::spike;
+        event.occurence_timestamp = current_sim_time;
+        event.type = spikestack::EventType::Spike;
         event.destination = it;
 
         m_dispatcher->Push(event);
@@ -128,7 +123,6 @@ float LifNeuron::GetVoltageReset() const
 
 float LifNeuron::GetVoltageInstantaneous() const
 {
-    std::lock_guard<std::mutex> lock(m_mutexVInstantaneous);
     return m_vInstantaneous;
 }
 
