@@ -3,9 +3,9 @@
 
 #include "Event.hpp"
 
-#include <deque>
 #include <memory>
 #include <mutex>
+#include <queue>
 
 
 namespace spikestack
@@ -15,15 +15,12 @@ namespace spikestack
     {
     public:
         EventQueue();
-        
         ~EventQueue();
-
-        void PushEvent(event event);
-        
+        void PushEvent(event ev);
         event PopEvent();
 
     private:
-        std::deque<event> m_queue;
+        std::priority_queue<event> m_queue;
         mutable std::mutex m_queueMutex;
     };
 }

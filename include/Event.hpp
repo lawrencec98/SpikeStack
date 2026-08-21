@@ -9,15 +9,13 @@
 namespace spikestack
 {
 
-    class Event
+    // TODO: Pretty sure i should embed the actual spike in here as well...
+    struct Event
     {
-    public:
-        Event();
-        ~Event();
-    private:
-        spikestack::EventType m_type;
+        spikestack::EventType type;
+        double timestamp;
+        std::shared_ptr<INeuron> destination;
     };
-
 
 } //namespace spikestack
 

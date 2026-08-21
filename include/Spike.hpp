@@ -15,14 +15,14 @@ namespace spike
         int x;
         int y;
         spike::Polarity polarity;
-        std::chrono::steady_clock::time_point timestamp;
+        double timestamp;
     };
 
     struct Spike
     {
         long int source_id;
         spike::Polarity polarity;
-        std::chrono::steady_clock::time_point timestamp;
+        double timestamp;
     };
 }
 

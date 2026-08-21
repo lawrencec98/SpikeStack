@@ -1,8 +1,9 @@
 #include "LifNeuron.hpp"
 
 
-LifNeuron::LifNeuron(LifNeuronInfo info, std::vector<float> neuronAdjMatrix)
-    :   m_leakageRate(info.leakageRate),
+LifNeuron::LifNeuron(std::shared_ptr<EventDispatcher> dispatcher, double current_simtime, LifNeuronInfo info, std::vector<float> neuronAdjMatrix)
+    :   m_dispatcher(dispatcher),
+        m_leakageRate(info.leakageRate),
         m_timeConstant(1/m_leakageRate),
         m_vRest(info.vrest),
         m_vThreshold(info.vthreshold),
@@ -11,9 +12,9 @@ LifNeuron::LifNeuron(LifNeuronInfo info, std::vector<float> neuronAdjMatrix)
         m_vMax(info.vmax),
         m_vSpike(info.vSpike),
         m_vInstantaneous(m_vRest), //Start off at rest
-        m_lastSpikeTime(std::chrono::steady_clock::now()),
+        m_lastSpikeTime(current_simtime),
         m_absoluteRefactoryPeriod(info.absoluteRefactoryPeriod),
-        m_refactoryPeriodStartTime(std::chrono::steady_clock::time_point::max())
+        m_refactoryPeriodStartTime(std::numeric_limits<double>::max())
 {
     //TODO add config parsing.
 
@@ -33,9 +34,11 @@ LifNeuron::~LifNeuron()
  * factoring in synaptic weights. Then decides whether we should fire a neuron based on v_thresh.
  * @param spike [in] - An incoming spike sent by another neuron
  */
-void LifNeuron::PushSpike(spike::Spike spike)
+void LifNeuron::PushSpike(spike::Spike spike, double current_simtime)
 {
-    LifNeuron::UpdateInstantaneousVoltageOnPushSpike(); //because we have not updated the value of m_InstantaneousVoltage since the last PushSpike event on this neuron.
+    double sim_time = spike.timestamp;
+
+    LifNeuron::SimulateLeakedVoltage(current_simtime); //because we have not updated the value of m_InstantaneousVoltage since the last PushSpike event on this neuron.
 
     std::lock_guard<std::mutex> lockvInst(m_mutexVInstantaneous);
     std::lock_guard<std::mutex> lockLastSpikeTime(m_mutexLastSpikeTime);
@@ -48,17 +51,17 @@ void LifNeuron::PushSpike(spike::Spike spike)
 
     if (m_vInstantaneous >= m_vThreshold)
     {
-        if (!(std::chrono::steady_clock::now() - m_refactoryPeriodStartTime < m_absoluteRefactoryPeriod)) // If we were still within abs refactory period we would skip firing this spike.
+        if (!(current_simtime - m_refactoryPeriodStartTime < m_absoluteRefactoryPeriod)) // If we were still within abs refactory period we would skip firing this spike.
         {
-            LifNeuron::Fire();
+            Fire(current_simtime);
         }
     }
 
-    m_lastSpikeTime = std::chrono::steady_clock::now();
+    m_lastSpikeTime = current_simtime;
 }
 
 
-void LifNeuron::Fire() //Send a spike to all? or some? connected neurons
+void LifNeuron::Fire(double current_sim_time) //Send a spike to all? or some? connected neurons
 {
     // TODO: Note that neurons can connect to themself. We need to make sure that a neuron doesn't
     // recursively call Fire on itself forever.
@@ -66,26 +69,29 @@ void LifNeuron::Fire() //Send a spike to all? or some? connected neurons
     //TODO CHANGE ALL OF THIS BIT.
     spike::Spike spike;
     spike.polarity = spike::Polarity::positive; // how do we decide if the outgoing spike should be positive or negative?
-    spike.timestamp = std::chrono::steady_clock::now();
+    spike.timestamp = current_sim_time;
     spike.source_id = m_neuronId;
     
     for (auto& it : m_connectedNeurons)
     {
-        it->PushSpike(spike);
+        spikestack::Event event;
+        event.timestamp = current_sim_time;
+        event.type = spikestack::EventType::spike;
+        event.destination = it;
+
+        m_dispatcher->Push(event);
     }
 
     m_vInstantaneous = m_vReset;
-    m_refactoryPeriodStartTime = std::chrono::steady_clock::now();
+    m_refactoryPeriodStartTime = current_sim_time;
 }
 
 
-void LifNeuron::UpdateInstantaneousVoltageOnPushSpike()
+void LifNeuron::SimulateLeakedVoltage(double current_sim_time)
 {
-    std::chrono::steady_clock::duration tElapsedSinceLastSpike = std::chrono::steady_clock::now() - m_lastSpikeTime;
+    double tElapsedSinceLastSpike = current_sim_time - m_lastSpikeTime;
 
-    float tElapsedFloat = std::chrono::steady_clock::duration(tElapsedSinceLastSpike).count();
-
-    float voltageLeaked = tElapsedFloat * m_leakageRate; // linear leakage model.
+    float voltageLeaked = tElapsedSinceLastSpike * m_leakageRate; // linear leakage model.
 
     float newVInst = m_vInstantaneous - voltageLeaked;
 
@@ -141,7 +147,7 @@ float LifNeuron::GetVoltageMax() const
     return m_vMax;
 }
 
-std::chrono::duration<double> LifNeuron::GetVoltageRefactoryPeriod() const
+double LifNeuron::GetVoltageRefactoryPeriod() const
 {
     return m_absoluteRefactoryPeriod;
 }

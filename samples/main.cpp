@@ -4,33 +4,33 @@
 
 int main()
 {
-    LifNeuronInfo info;
-    info.leakageRate = 0.25;
-    info.absoluteRefactoryPeriod = std::chrono::milliseconds(10);
-    info.vSpike = 0.05;
-    info.vmin = -1;
-    info.vmin = 2;
-    info.vreset = -0.65;
-    info.vthreshold = -0.5;
+    // LifNeuronInfo info;
+    // info.leakageRate = 0.25;
+    // info.absoluteRefactoryPeriod = std::chrono::milliseconds(10);
+    // info.vSpike = 0.05;
+    // info.vmin = -1;
+    // info.vmin = 2;
+    // info.vreset = -0.65;
+    // info.vthreshold = -0.5;
 
-    std::vector<std::unique_ptr<LifNeuron>> myNeurons;
-    std::vector<float> adj;
+    // std::vector<std::unique_ptr<LifNeuron>> myNeurons;
+    // std::vector<float> adj;
 
-    for (int i = 0; i < 100; i++)
-    {
-        myNeurons.push_back(std::move(std::make_unique<LifNeuron>(info, adj))); 
-    }
+    // for (int i = 0; i < 100; i++)
+    // {
+    //     myNeurons.push_back(std::move(std::make_unique<LifNeuron>(info, adj))); 
+    // }
 
-    std::cout << "Hello world" << std::endl;
+    // std::cout << "Hello world" << std::endl;
 
-    /*
-        A  B  C  D
-    A   0  1  1  0 
-    B   0  0  1  0 
-    C   1  1  0  1
-    D   1  1  1  0   
+    // /*
+    //     A  B  C  D
+    // A   0  1  1  0 
+    // B   0  0  1  0 
+    // C   1  1  0  1
+    // D   1  1  1  0   
     
-    */
-    std::vector<std::vector<bool>> adjacencyMatrix;
+    // */
+    // std::vector<std::vector<bool>> adjacencyMatrix;
 
 }

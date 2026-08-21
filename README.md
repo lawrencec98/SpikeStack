@@ -35,5 +35,10 @@ A single PSP is typically not enough to fire a neuron - firing requires a summat
 
 PSP decays over time, with the voltage tending towards resting - the rate of this decay is characterized by the membrane time constant tau (τ). Two spikes must arrive within one time constant in order to temporally accumulate. The "leaky" in Leaky-Integrate-and-Fire Neurons refer to this - neurons leak PSP in between spikes, and only fires if enough inputs arrive closely in time.
 
+
+# Notes
+* Time units are in milliseconds.
+* Voltage units are in millivolts.
+
 # References
 * https://neuromorphiccore.ai/

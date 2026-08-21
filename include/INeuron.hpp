@@ -8,10 +8,8 @@ class INeuron
 {
 public:
     virtual ~INeuron() = default;
-
-    virtual void PushSpike(spike::Spike spike) = 0;
-    
-    virtual void Fire() = 0;
+    virtual void PushSpike(spike::Spike spike, double current_simtime) = 0;
+    virtual void Fire(double sim_time) = 0;
 };
 
 
