@@ -5,10 +5,11 @@
 namespace spikestack
 {
 
-    enum class EventType
-    {
-        Spike
-    };
+    
+enum class EventType
+{
+    Spike
+};
 
 
 } //namespace spikestack

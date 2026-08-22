@@ -11,19 +11,20 @@
 namespace spikestack
 {
 
-    template<typename event>
-    class EventQueue
-    {
-    public:
-        EventQueue();
-        ~EventQueue();
-        void PushEvent(event ev);
-        event PopEvent();
+    
+template<typename event>
+class EventQueue
+{
+public:
+    EventQueue();
+    ~EventQueue();
+    void PushEvent(event ev);
+    event PopEvent();
 
-    private:
-        std::priority_queue<std::shared_ptr<event>> m_queue;
-        mutable std::mutex m_queueMutex;
-    };
+private:
+    std::priority_queue<std::shared_ptr<event>> m_queue;
+    mutable std::mutex m_queueMutex;
+};
 
     
 }//namespace spikestack

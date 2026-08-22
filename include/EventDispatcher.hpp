@@ -10,22 +10,23 @@
 namespace spikestack
 {
 
-    class EventDispatcher
-    {
-    public:
-        void Push(spikestack::Event);
+    
+class EventDispatcher
+{
+public:
+    void Push(spikestack::Event);
 
-    private:
-        spikestack::Event_sp PopFromEventQueue();
+private:
+    spikestack::Event_sp PopFromEventQueue();
 
-        void ProcessEvent(spikestack::Event event);
+    void ProcessEvent(spikestack::Event event);
 
-        void ProcessSpikeEvent();
-        double m_currentSimTime;
+    void ProcessSpikeEvent();
+    double m_currentSimTime;
 
-        std::shared_ptr<spikestack::EventQueue<spikestack::Event_sp>> m_queue;
-        std::vector<std::shared_ptr<INeuron>> m_neurons;
-    };
+    std::shared_ptr<spikestack::EventQueue<spikestack::Event_sp>> m_queue;
+    std::vector<std::shared_ptr<INeuron>> m_neurons;
+};
 
 
 }//namespace spikestack

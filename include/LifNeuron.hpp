@@ -10,6 +10,7 @@
 #include "Event.hpp"
 #include "EventDispatcher.hpp"
 #include "Spike.hpp"
+#include "Synapse.hpp"
 
 
 namespace spikestack
@@ -107,7 +108,9 @@ private:
 
     const float m_vSpike = 100; //[mV]
 
-    std::vector<std::shared_ptr<INeuron>> m_connectedNeurons;
+    std::vector<std::shared_ptr<Synapse>> m_postSynapses;
+    std::vector<std::shared_ptr<Synapse>> m_preSynapses;
+    // std::vector<std::shared_ptr<INeuron>> m_connectedNeurons;
     std::vector<float> m_synapticWeights; // Strength of the connection between this neuron and its synaptic pairs.
 
     double m_lastSpikeTime;

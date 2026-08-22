@@ -68,12 +68,12 @@ void LifNeuron::Fire(double current_sim_time)
     spike.delivered_time = spike.occ_time; // TODO figure out how to represent synaptic delay.
     spike.source_id = m_neuronId;
     
-    for (auto& it : m_connectedNeurons)
+    for (auto& syn : m_preSynapses)
     {
         spikestack::Event event;
         event.occurence_timestamp = current_sim_time;
         event.type = spikestack::EventType::Spike;
-        event.destination = it;
+        event.destination = syn->getPostNeuron();
 
         m_dispatcher->Push(event);
     }
