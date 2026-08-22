@@ -12,6 +12,9 @@
 #include "Spike.hpp"
 
 
+namespace spikestack
+{
+
 /*
 Model of an LIF Neuron
 
@@ -113,4 +116,6 @@ private:
     double m_refactoryPeriodStartTime;
 };
 
+
+} //namespace spikestack
 #endif //LIF_NEURON_HPP

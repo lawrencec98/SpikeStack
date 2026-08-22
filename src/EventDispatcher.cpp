@@ -1,5 +1,6 @@
 #include "EventDispatcher.hpp"
 
+using namespace spikestack;
 
 spikestack::Event_sp EventDispatcher::PopFromEventQueue()
 {
@@ -14,12 +15,12 @@ void EventDispatcher::ProcessEvent(spikestack::Event event)
     switch(event.type)
     {
         case spikestack::EventType::Spike:
-            ProcessSpike();
+            ProcessSpikeEvent();
     }
 }
 
 
-void EventDispatcher::ProcessSpike()
+void EventDispatcher::ProcessSpikeEvent()
 {
 
 }

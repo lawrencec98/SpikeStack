@@ -1,5 +1,6 @@
 #include "EventQueue.hpp"
 
+using namespace spikestack;
 
 template<typename event>
 spikestack::EventQueue<event>::EventQueue()

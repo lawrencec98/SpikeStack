@@ -10,6 +10,7 @@
 
 namespace spikestack
 {
+
     template<typename event>
     class EventQueue
     {
@@ -23,6 +24,8 @@ namespace spikestack
         std::priority_queue<std::shared_ptr<event>> m_queue;
         mutable std::mutex m_queueMutex;
     };
-}
+
+    
+}//namespace spikestack
 
 #endif //EVENT_QUEUE_HPP

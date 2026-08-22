@@ -4,27 +4,31 @@
 
 #include "Event.hpp"
 #include "EventQueue.hpp"
-#include "InputNeuron.hpp"
-#include "LifNeuron.hpp"
+#include "INeuron.hpp"
 
 
-class EventDispatcher
+namespace spikestack
 {
-public:
-    void Push(spikestack::Event);
 
-private:
-    spikestack::Event_sp PopFromEventQueue();
+    class EventDispatcher
+    {
+    public:
+        void Push(spikestack::Event);
 
-    void ProcessEvent(spikestack::Event event);
+    private:
+        spikestack::Event_sp PopFromEventQueue();
 
-    void ProcessSpike();
-    double m_currentSimTime;
+        void ProcessEvent(spikestack::Event event);
 
-    std::shared_ptr<spikestack::EventQueue<spikestack::Event_sp>> m_queue;
-    std::vector<std::shared_ptr<INeuron>> m_neurons;
-};
+        void ProcessSpikeEvent();
+        double m_currentSimTime;
 
+        std::shared_ptr<spikestack::EventQueue<spikestack::Event_sp>> m_queue;
+        std::vector<std::shared_ptr<INeuron>> m_neurons;
+    };
+
+
+}//namespace spikestack
 
 
 #endif // EVENT_DISPATCHER_HPP

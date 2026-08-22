@@ -1,5 +1,6 @@
 #include "LifNeuron.hpp"
 
+using namespace spikestack;
 
 LifNeuron::LifNeuron(std::shared_ptr<EventDispatcher> dispatcher, double current_simtime, LifNeuronInfo info, std::vector<float> neuronAdjMatrix)
     :   m_dispatcher(dispatcher),
