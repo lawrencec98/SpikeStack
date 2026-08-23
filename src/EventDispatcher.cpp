@@ -28,6 +28,6 @@ void EventDispatcher::ProcessSpikeEvent(Event event)
 
     for (auto& syn : dest_synapses)
     {
-        syn->CalculateSpikeVoltage() // TODO needs spike information.
+        syn->ProcessSpike() // TODO needs spike information.
     }
 }

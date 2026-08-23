@@ -78,8 +78,8 @@ public:
     float GetVoltageMin() const;
     float GetVoltageMax() const;
     Time GetVoltageRefactoryPeriod() const;
-    std::vector<std::shared_ptr<Synapse>> GetPreSynapses() const override;
-    std::vector<std::shared_ptr<Synapse>> GetPostSynapses() const override;
+    std::vector<SynapseId> GetPreSynapses() const override;
+    std::vector<SynapseId> GetPostSynapses() const override;
 
 private:
     /**
@@ -110,10 +110,8 @@ private:
 
     const float m_vSpike = 100; //[mV]
 
-    std::vector<std::shared_ptr<Synapse>> m_postSynapses;
-    std::vector<std::shared_ptr<Synapse>> m_preSynapses;
-    // std::vector<std::shared_ptr<INeuron>> m_connectedNeurons;
-    std::vector<float> m_synapticWeights; // Strength of the connection between this neuron and its synaptic pairs.
+    std::vector<SynapseId> m_postSynapses;
+    std::vector<SynapseId> m_preSynapses;
 
     double m_lastSpikeTime;
 

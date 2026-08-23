@@ -26,9 +26,9 @@ struct InputSpike
 struct Spike
 {
     NeuronId source_id;
-    spike::Polarity polarity;
     Time occ_time; // The point at which the neuron exceeded v_threshold.
     Time delivered_time; // This factors in synaptic delay.
+    double weight;
 };
 
 

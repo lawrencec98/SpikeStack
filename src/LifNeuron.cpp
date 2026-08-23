@@ -37,23 +37,22 @@ LifNeuron::~LifNeuron()
  */
 void LifNeuron::PushSpike(spike::Spike spike, double current_simtime)
 {
-    LifNeuron::SimulateLeakedVoltage(current_simtime); //because we have not updated the value of m_InstantaneousVoltage since the last PushSpike event on this neuron.
+    // LifNeuron::SimulateLeakedVoltage(current_simtime); //because we have not updated the value of m_InstantaneousVoltage since the last PushSpike event on this neuron.
 
-    bool isPositive = (spike.polarity == spike::Polarity::positive);
-    float spikeVoltage = LifNeuron::CalculateSpikeVoltage(isPositive);
-    float newVInst = m_vInstantaneous + spikeVoltage;
+    // float spikeVoltage = LifNeuron::CalculateSpikeVoltage(isPositive);
+    // float newVInst = m_vInstantaneous + spikeVoltage;
 
-    m_vInstantaneous = std::min(m_vMax, newVInst); // Make sure we don't go past max voltage.
+    // m_vInstantaneous = std::min(m_vMax, newVInst); // Make sure we don't go past max voltage.
 
-    if (m_vInstantaneous >= m_vThreshold)
-    {
-        if (!(current_simtime - m_refactoryPeriodStartTime < m_absoluteRefactoryPeriod)) // If we were still within abs refactory period we would skip firing this spike.
-        {
-            Fire(current_simtime);
-        }
-    }
+    // if (m_vInstantaneous >= m_vThreshold)
+    // {
+    //     if (!(current_simtime - m_refactoryPeriodStartTime < m_absoluteRefactoryPeriod)) // If we were still within abs refactory period we would skip firing this spike.
+    //     {
+    //         Fire(current_simtime);
+    //     }
+    // }
 
-    m_lastSpikeTime = current_simtime;
+    // m_lastSpikeTime = current_simtime;
 }
 
 
@@ -63,7 +62,6 @@ void LifNeuron::Fire(double current_sim_time)
     // recursively call Fire on itself forever.
 
     spike::Spike spike;
-    spike.polarity = spike::Polarity::positive; // how do we decide if the outgoing spike should be positive or negative?
     spike.occ_time = current_sim_time;
     spike.delivered_time = spike.occ_time; // TODO figure out how to represent synaptic delay.
     spike.source_id = m_neuronId;
@@ -143,13 +141,13 @@ double LifNeuron::GetVoltageRefactoryPeriod() const
 }
 
 
-std::vector<std::shared_ptr<Synapse>> LifNeuron::GetPreSynapses() const
+std::vector<SynapseId> LifNeuron::GetPreSynapses() const
 {
     return m_preSynapses;
 }
 
 
-std::vector<std::shared_ptr<Synapse>> LifNeuron::GetPostSynapses() const
+std::vector<SynapseId> LifNeuron::GetPostSynapses() const
 {
     return m_postSynapses;
 }

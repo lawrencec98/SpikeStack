@@ -6,10 +6,11 @@
 
 #include "Spike.hpp"
 #include "Synapse.hpp"
+#include "Types.hpp"
 
 namespace spikestack 
 {
-
+    
     
 class INeuron
 {
@@ -18,8 +19,8 @@ public:
     virtual void PushSpike(spike::Spike spike, Time current_simtime) = 0;
     virtual void Fire(Time sim_time) = 0;
 
-    virtual std::vector<std::shared_ptr<Synapse>> GetPreSynapses() const = 0;
-    virtual std::vector<std::shared_ptr<Synapse>> GetPostSynapses() const = 0;
+    virtual std::vector<SynapseId> GetPreSynapses() const = 0;
+    virtual std::vector<SynapseId> GetPostSynapses() const = 0;
 };
 
 
