@@ -1,6 +1,8 @@
 #ifndef SPIKE_HPP
 #define SPIKE_HPP
 
+#include "Types.hpp"
+
 
 namespace spikestack
 {
@@ -18,15 +20,15 @@ struct InputSpike
     int x;
     int y;
     spike::Polarity polarity;
-    double timestamp;
+    Time timestamp;
 };
 
 struct Spike
 {
-    long int source_id;
+    NeuronId source_id;
     spike::Polarity polarity;
-    double occ_time; // The point at which the neuron exceeded v_threshold.
-    double delivered_time; // This factors in synaptic delay.
+    Time occ_time; // The point at which the neuron exceeded v_threshold.
+    Time delivered_time; // This factors in synaptic delay.
 };
 
 

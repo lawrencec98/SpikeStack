@@ -11,6 +11,7 @@
 #include "EventDispatcher.hpp"
 #include "Spike.hpp"
 #include "Synapse.hpp"
+#include "Types.hpp"
 
 
 namespace spikestack
@@ -46,14 +47,14 @@ struct LifNeuronInfo
     float vmax = 1.0;
     float leakageRate;
     float vSpike = 100;
-    double absoluteRefactoryPeriod;
+    Time absoluteRefactoryPeriod;
 };
 
 
 class LifNeuron : public INeuron
 {
 public:
-    LifNeuron(std::shared_ptr<EventDispatcher> dispatcher, double current_simtime, LifNeuronInfo info, std::vector<float> neuronAdjMatrix);
+    LifNeuron(std::shared_ptr<EventDispatcher> dispatcher, Time current_simtime, LifNeuronInfo info, std::vector<float> neuronAdjMatrix);
     LifNeuron(const LifNeuron&) = delete;
     LifNeuron& operator=(const LifNeuron&) = delete;
 
@@ -62,12 +63,12 @@ public:
     /**
      * @brief Processes an incoming spike and updates internal states of this neuron.
      */
-    void PushSpike(spike::Spike spike, double current_simtime) override;
+    void PushSpike(spike::Spike spike, Time current_simtime) override;
     
     /**
      * @brief Prepares a spike then pushes it to the EventQueue.
      */
-    void Fire(double sim_time) override;
+    void Fire(Time sim_time) override;
 
     float GetVoltageRest() const;
     float GetVoltageThreshold() const;
@@ -76,8 +77,9 @@ public:
     float GetLeakageRate() const;
     float GetVoltageMin() const;
     float GetVoltageMax() const;
-    double GetVoltageRefactoryPeriod() const;
-
+    Time GetVoltageRefactoryPeriod() const;
+    std::vector<std::shared_ptr<Synapse>> GetPreSynapses() const override;
+    std::vector<std::shared_ptr<Synapse>> GetPostSynapses() const override;
 
 private:
     /**
@@ -93,7 +95,7 @@ private:
 
     std::shared_ptr<EventDispatcher> m_dispatcher;
 
-    long int m_neuronId;
+    unsigned long int m_neuronId;
 
     float m_vRest = -65.0 ; //[mV]
     float m_vThreshold = -60.0; //[mV]

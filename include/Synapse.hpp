@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "INeuron.hpp"
+#include "Types.hpp"
 
 
 namespace spikestack
@@ -13,11 +14,17 @@ namespace spikestack
 class Synapse
 {
 public:
-    std::shared_ptr<INeuron> getPreNeuron() const;
-    std::shared_ptr<INeuron> getPostNeuron() const;
+    Synapse(NeuronId pre, NeuronId post, double weight);
+    ~Synapse();
+    void PushSpike(spike::Spike spike, Time current_simtime);
+    double CalculateSpikeVoltage(spike::Spike spike);
+    NeuronId getPreNeuron() const;
+    NeuronId getPostNeuron() const;
 private:
-    std::shared_ptr<INeuron> preNeuron;
-    std::shared_ptr<INeuron> postNeuron;
+    spike::Polarity synapsePolarity; // not sure about this one, spike and synapse probably shouldn't share teh same type
+    NeuronId m_preNeuron;
+    NeuronId m_postNeuron;
+    double m_synapticWeight;
 };
 
 

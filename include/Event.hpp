@@ -3,7 +3,7 @@
 
 
 #include "EventType.hpp"
-
+#include "Types.hpp"
 
 
 namespace spikestack
@@ -14,7 +14,7 @@ namespace spikestack
 struct Event
 {
     spikestack::EventType type;
-    double occurence_timestamp;
+    Time occurence_timestamp;
     std::shared_ptr<INeuron> destination;
 };
 

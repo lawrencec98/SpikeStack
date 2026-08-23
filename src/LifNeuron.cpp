@@ -70,12 +70,12 @@ void LifNeuron::Fire(double current_sim_time)
     
     for (auto& syn : m_preSynapses)
     {
-        spikestack::Event event;
-        event.occurence_timestamp = current_sim_time;
-        event.type = spikestack::EventType::Spike;
-        event.destination = syn->getPostNeuron();
+        // spikestack::Event event;
+        // event.occurence_timestamp = current_sim_time;
+        // event.type = spikestack::EventType::Spike;
+        // event.destination = syn->getPostNeuron();
 
-        m_dispatcher->Push(event);
+        // m_dispatcher->Push(event);
     }
 
     m_vInstantaneous = m_vReset;
@@ -95,54 +95,61 @@ void LifNeuron::SimulateLeakedVoltage(double current_sim_time)
 }
 
 
-float LifNeuron::CalculateSpikeVoltage(bool isPositive)
-{
-    // TODO
-    // Look into CSR - compressed sparse row. (save all col ids, save all values, only save row ptrs)
-
-    //float weight = m_connectedNeurons & m_synapticWeights;
-
-    //float result = m_vSpike * weight;
-    return 0;
-}
-
-
 float LifNeuron::GetVoltageRest() const
 {
     return m_vRest;
 }
+
 
 float LifNeuron::GetVoltageThreshold() const
 {
     return m_vThreshold;
 }
 
+
 float LifNeuron::GetVoltageReset() const
 {
     return m_vReset;
 }
+
 
 float LifNeuron::GetVoltageInstantaneous() const
 {
     return m_vInstantaneous;
 }
 
+
 float LifNeuron::GetLeakageRate() const
 {
     return m_leakageRate;
 }
+
 
 float LifNeuron::GetVoltageMin() const
 {
     return m_vMin;
 }
 
+
 float LifNeuron::GetVoltageMax() const
 {
     return m_vMax;
 }
 
+
 double LifNeuron::GetVoltageRefactoryPeriod() const
 {
     return m_absoluteRefactoryPeriod;
+}
+
+
+std::vector<std::shared_ptr<Synapse>> LifNeuron::GetPreSynapses() const
+{
+    return m_preSynapses;
+}
+
+
+std::vector<std::shared_ptr<Synapse>> LifNeuron::GetPostSynapses() const
+{
+    return m_postSynapses;
 }

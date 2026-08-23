@@ -5,6 +5,7 @@
 #include "Event.hpp"
 #include "EventQueue.hpp"
 #include "INeuron.hpp"
+#include "Synapse.hpp"
 
 
 namespace spikestack
@@ -17,14 +18,14 @@ public:
     void Push(spikestack::Event);
 
 private:
-    spikestack::Event_sp PopFromEventQueue();
+    Event_sp PopFromEventQueue();
 
-    void ProcessEvent(spikestack::Event event);
+    void ProcessEvent(Event event);
 
-    void ProcessSpikeEvent();
-    double m_currentSimTime;
+    void ProcessSpikeEvent(Event event);
+    Time m_currentSimTime;
 
-    std::shared_ptr<spikestack::EventQueue<spikestack::Event_sp>> m_queue;
+    std::shared_ptr<EventQueue<Event_sp>> m_queue;
     std::vector<std::shared_ptr<INeuron>> m_neurons;
 };
 
