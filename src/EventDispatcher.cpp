@@ -3,8 +3,9 @@
 using namespace spikestack;
 
 
-EventDispatcher::EventDispatcher()
-:   m_currentSimTime(0)
+EventDispatcher::EventDispatcher(std::shared_ptr<EventQueue<std::shared_ptr<Event>>> queue)
+:   m_currentSimTime(0),
+    m_queue(queue)
 {
 
 }

@@ -15,8 +15,8 @@ namespace spikestack
 class EventDispatcher
 {
 public:
-    EventDispatcher();
-    void Push(spikestack::Event);
+    EventDispatcher(std::shared_ptr<EventQueue<std::shared_ptr<Event>>> queue);
+    void Push(Event);
 
 private:
     std::shared_ptr<Event> PopFromEventQueue();

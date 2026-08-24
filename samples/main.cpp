@@ -1,12 +1,18 @@
 #include <iostream>
 
 #include "EventDispatcher.hpp"
+#include "EventQueue.hpp"
 #include "LifNeuron.hpp"
 #include "Types.hpp"
 
+using namespace spikestack;
+
+
 int main()
 {
-    spikestack::EventDispatcher dispatcher;
+    std::shared_ptr<EventQueue<std::shared_ptr<Event>>> queue_sp = std::make_shared<EventQueue<std::shared_ptr<Event>>>();
+    
+    spikestack::EventDispatcher dispatcher(queue_sp);
 
 
     spikestack::LifNeuronInfo info;

@@ -9,7 +9,6 @@ add_library(spikestack SHARED)
 target_include_directories(spikestack PUBLIC include)
 target_sources(spikestack
     PRIVATE
-        src/EventQueue.cpp
         src/EventDispatcher.cpp
         src/LifNeuron.cpp
         src/Synapse.cpp

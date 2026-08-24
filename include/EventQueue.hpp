@@ -17,23 +17,34 @@ template<typename T>
 class EventQueue
 {
 public:
-    EventQueue();
-    ~EventQueue();
+    EventQueue()
+    :   m_queue(std::make_shared<std::priority_queue<T>>())
+    {
+        // TODO: modify so that it knows what to order by.
+    }
+
+    ~EventQueue()
+    {
+        while(!m_queue->empty())
+        {
+            m_queue->pop();
+        }
+    }
 
     void PushEvent(T ev)
     {
         std::lock_guard<std::mutex> lock(m_queueMutex);
-        m_queue.push(ev);
+        m_queue->push(ev);
     }
     
     T PopEvent()
     {
         std::lock_guard<std::mutex> lock(m_queueMutex);
 
-        if (!m_queue.empty())
+        if (!m_queue->empty())
         {
-            T ev = m_queue.top();
-            m_queue.pop();
+            T ev = m_queue->top();
+            m_queue->pop();
             return ev;
         }
         else 
@@ -43,7 +54,7 @@ public:
     }
 
 private:
-    std::priority_queue<T> m_queue;
+    std::shared_ptr<std::priority_queue<T>> m_queue;
     mutable std::mutex m_queueMutex;
 };
 
