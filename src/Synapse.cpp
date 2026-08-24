@@ -35,7 +35,7 @@ void Synapse::ProcessSpike(std::shared_ptr<spike::Spike> spike, double current_s
 {
     spike->delivered_time = spike->occ_time + m_delay;
 
-    if (m_type == Synapse::SynapseType::excitatory)
+    if (m_type == SynapseType::excitatory)
     {
         spike->weight = 1 * m_weight;
     }

@@ -2,17 +2,25 @@
 
 using namespace spikestack;
 
-spikestack::Event_sp EventDispatcher::PopFromEventQueue()
+
+EventDispatcher::EventDispatcher()
+:   m_currentSimTime(0)
 {
-    spikestack::Event event = m_queue->PopEvent();
+
+}
+
+
+std::shared_ptr<Event> EventDispatcher::PopFromEventQueue()
+{
+    std::shared_ptr<Event> event = m_queue->PopEvent();
     
     ProcessEvent(event);
 }
 
 
-void EventDispatcher::ProcessEvent(spikestack::Event event)
+void EventDispatcher::ProcessEvent(std::shared_ptr<Event> event)
 {
-    switch(event.type)
+    switch(event->type)
     {
         case spikestack::EventType::Spike:
             ProcessSpikeEvent(event);
@@ -20,14 +28,15 @@ void EventDispatcher::ProcessEvent(spikestack::Event event)
 }
 
 
-void EventDispatcher::ProcessSpikeEvent(Event event)
+void EventDispatcher::ProcessSpikeEvent(std::shared_ptr<Event> event)
 {
-    std::shared_ptr<INeuron> neuron = event.destination;
+    //TODO
+    // SynapseId dest_synapse = event->destination;
 
-    std::vector<std::shared_ptr<Synapse>> dest_synapses = neuron->GetPostSynapses();
+    // std::vector<SynapseId> dest_synapses = dest_synapse->GetPostSynapses();
 
-    for (auto& syn : dest_synapses)
-    {
-        syn->ProcessSpike() // TODO needs spike information.
-    }
+    // for (auto& syn : dest_synapses)
+    // {
+    //     syn->ProcessSpike() // TODO needs spike information.
+    // }
 }

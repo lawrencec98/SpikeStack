@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <mutex>
+#include <stdexcept>
 #include <queue>
 
 
@@ -12,17 +13,37 @@ namespace spikestack
 {
 
     
-template<typename event>
+template<typename T>
 class EventQueue
 {
 public:
     EventQueue();
     ~EventQueue();
-    void PushEvent(event ev);
-    event PopEvent();
+
+    void PushEvent(T ev)
+    {
+        std::lock_guard<std::mutex> lock(m_queueMutex);
+        m_queue.push(ev);
+    }
+    
+    T PopEvent()
+    {
+        std::lock_guard<std::mutex> lock(m_queueMutex);
+
+        if (!m_queue.empty())
+        {
+            T ev = m_queue.top();
+            m_queue.pop();
+            return ev;
+        }
+        else 
+        {
+            throw std::runtime_error("Error: EventQueue is empty");
+        }
+    }
 
 private:
-    std::priority_queue<std::shared_ptr<event>> m_queue;
+    std::priority_queue<T> m_queue;
     mutable std::mutex m_queueMutex;
 };
 

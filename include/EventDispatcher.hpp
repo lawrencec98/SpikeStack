@@ -15,17 +15,18 @@ namespace spikestack
 class EventDispatcher
 {
 public:
+    EventDispatcher();
     void Push(spikestack::Event);
 
 private:
-    Event_sp PopFromEventQueue();
+    std::shared_ptr<Event> PopFromEventQueue();
 
-    void ProcessEvent(Event event);
+    void ProcessEvent(std::shared_ptr<Event> event);
 
-    void ProcessSpikeEvent(Event event);
+    void ProcessSpikeEvent(std::shared_ptr<Event> event);
     Time m_currentSimTime;
 
-    std::shared_ptr<EventQueue<Event_sp>> m_queue;
+    std::shared_ptr<EventQueue<std::shared_ptr<Event>>> m_queue;
     std::vector<std::shared_ptr<INeuron>> m_neurons;
 };
 

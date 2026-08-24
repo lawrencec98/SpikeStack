@@ -32,10 +32,6 @@ struct Spike
 };
 
 
-typedef std::shared_ptr<Spike> Spike_sp;
-typedef std::shared_ptr<InputSpike> InputSpike_sp;
-
-
 } //namespace spike
 } //namespace spikestack
 

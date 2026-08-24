@@ -2,9 +2,8 @@
 
 using namespace spikestack;
 
-LifNeuron::LifNeuron(std::shared_ptr<EventDispatcher> dispatcher, double current_simtime, LifNeuronInfo info, std::vector<float> neuronAdjMatrix)
-    :   m_dispatcher(dispatcher),
-        m_leakageRate(info.leakageRate),
+LifNeuron::LifNeuron(LifNeuronInfo info, std::vector<SynapseId> preSynapses, std::vector<SynapseId> postSynapses)
+    :   m_leakageRate(info.leakageRate),
         m_timeConstant(1/m_leakageRate),
         m_vRest(info.vrest),
         m_vThreshold(info.vthreshold),
@@ -13,7 +12,7 @@ LifNeuron::LifNeuron(std::shared_ptr<EventDispatcher> dispatcher, double current
         m_vMax(info.vmax),
         m_vSpike(info.vSpike),
         m_vInstantaneous(m_vRest), //Start off at rest
-        m_lastSpikeTime(current_simtime),
+        m_lastSpikeTime(0), // Assumes that neurons are created at the start of sim, and no new ones can be created
         m_absoluteRefactoryPeriod(info.absoluteRefactoryPeriod),
         m_refactoryPeriodStartTime(std::numeric_limits<double>::max())
 {

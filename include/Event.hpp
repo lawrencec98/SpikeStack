@@ -1,6 +1,7 @@
 #ifndef EVENT_HPP
 #define EVENT_HPP
 
+#include <memory>
 
 #include "EventType.hpp"
 #include "Types.hpp"
@@ -15,10 +16,9 @@ struct Event
 {
     spikestack::EventType type;
     Time occurence_timestamp;
-    std::shared_ptr<INeuron> destination;
+    SynapseId destination;
 };
 
-typedef std::shared_ptr<Event> Event_sp;
 
 
 } //namespace spikestack

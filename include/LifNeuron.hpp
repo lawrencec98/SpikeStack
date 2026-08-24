@@ -54,7 +54,7 @@ struct LifNeuronInfo
 class LifNeuron : public INeuron
 {
 public:
-    LifNeuron(std::shared_ptr<EventDispatcher> dispatcher, Time current_simtime, LifNeuronInfo info, std::vector<float> neuronAdjMatrix);
+    LifNeuron(LifNeuronInfo info, std::vector<SynapseId> preSynapses, std::vector<SynapseId> postSynapses);
     LifNeuron(const LifNeuron&) = delete;
     LifNeuron& operator=(const LifNeuron&) = delete;
 

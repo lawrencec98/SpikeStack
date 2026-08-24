@@ -1,20 +1,25 @@
 #include <iostream>
 
+#include "EventDispatcher.hpp"
 #include "LifNeuron.hpp"
+#include "Types.hpp"
 
 int main()
 {
-    // LifNeuronInfo info;
-    // info.leakageRate = 0.25;
-    // info.absoluteRefactoryPeriod = std::chrono::milliseconds(10);
-    // info.vSpike = 0.05;
-    // info.vmin = -1;
-    // info.vmin = 2;
-    // info.vreset = -0.65;
-    // info.vthreshold = -0.5;
+    spikestack::EventDispatcher dispatcher;
+
+
+    spikestack::LifNeuronInfo info;
+    info.leakageRate = 0.25;
+    info.absoluteRefactoryPeriod = 10;
+    info.vSpike = 0.05;
+    info.vmin = -1;
+    info.vmin = 2;
+    info.vreset = -0.65;
+    info.vthreshold = -0.5;
 
     // std::vector<std::unique_ptr<LifNeuron>> myNeurons;
-    // std::vector<float> adj;
+    std::vector<float> adj;
 
     // for (int i = 0; i < 100; i++)
     // {

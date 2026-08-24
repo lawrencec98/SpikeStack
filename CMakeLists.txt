@@ -9,7 +9,10 @@ add_library(spikestack SHARED)
 target_include_directories(spikestack PUBLIC include)
 target_sources(spikestack
     PRIVATE
+        src/EventQueue.cpp
+        src/EventDispatcher.cpp
         src/LifNeuron.cpp
+        src/Synapse.cpp
     
     PUBLIC
         FILE_SET myHeaders
@@ -17,7 +20,16 @@ target_sources(spikestack
         BASE_DIRS
             include
         FILES
+            include/Event.hpp
+            include/EventDispatcher.hpp
+            include/EventQueue.hpp
+            include/EventType.hpp
+            include/INeuron.hpp
+            include/InputNeuron.hpp
             include/LifNeuron.hpp
+            include/Spike.hpp
+            include/Synapse.hpp
+            include/Types.hpp
 )
 
 
