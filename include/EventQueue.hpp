@@ -12,13 +12,21 @@
 namespace spikestack
 {
 
+struct EventComparator
+{
+    bool operator()(const std::shared_ptr<Event>& a, const std::shared_ptr<Event>& b) const
+    {
+        return a->occurence_timestamp > b->occurence_timestamp;
+    }
+};
+
     
-template<typename T>
+template<typename T, typename Comparator>
 class EventQueue
 {
 public:
     EventQueue()
-    :   m_queue(std::make_shared<std::priority_queue<T>>())
+    :   m_queue(std::make_shared<std::priority_queue<T, std::vector<T>, Comparator>>())
     {
         // TODO: modify so that it knows what to order by.
     }
@@ -54,7 +62,7 @@ public:
     }
 
 private:
-    std::shared_ptr<std::priority_queue<T>> m_queue;
+    std::shared_ptr<std::priority_queue<T, std::vector<T>, Comparator>> m_queue;
     mutable std::mutex m_queueMutex;
 };
 

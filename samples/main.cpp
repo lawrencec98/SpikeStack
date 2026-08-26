@@ -10,7 +10,7 @@ using namespace spikestack;
 
 int main()
 {
-    std::shared_ptr<EventQueue<std::shared_ptr<Event>>> queue_sp = std::make_shared<EventQueue<std::shared_ptr<Event>>>();
+    std::shared_ptr<EventQueue<std::shared_ptr<Event>, EventComparator>> queue_sp = std::make_shared<EventQueue<std::shared_ptr<Event>, EventComparator>>();
     
     spikestack::EventDispatcher dispatcher(queue_sp);
 

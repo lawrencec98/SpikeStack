@@ -15,7 +15,7 @@ namespace spikestack
 class EventDispatcher
 {
 public:
-    EventDispatcher(std::shared_ptr<EventQueue<std::shared_ptr<Event>>> queue);
+    EventDispatcher(std::shared_ptr<EventQueue<std::shared_ptr<Event>, EventComparator>> queue);
     void Push(Event);
 
 private:
@@ -26,7 +26,7 @@ private:
     void ProcessSpikeEvent(std::shared_ptr<Event> event);
     Time m_currentSimTime;
 
-    std::shared_ptr<EventQueue<std::shared_ptr<Event>>> m_queue;
+    std::shared_ptr<EventQueue<std::shared_ptr<Event>, EventComparator>> m_queue;
     std::vector<std::shared_ptr<INeuron>> m_neurons;
 };
 
