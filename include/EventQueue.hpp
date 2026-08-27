@@ -20,7 +20,9 @@ struct EventComparator
     }
 };
 
-    
+
+// Made Comparator a template in case there are other types of events where
+// we order by something other than occurence timestamp.
 template<typename T, typename Comparator>
 class EventQueue
 {
