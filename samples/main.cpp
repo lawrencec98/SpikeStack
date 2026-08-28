@@ -43,10 +43,10 @@ int main()
     std::vector<std::unique_ptr<LifNeuron>> myNeurons;
     std::vector<float> adj;
 
-    for (int i = 0; i < 3; i++)
-    {
-        myNeurons.push_back(std::move(std::make_unique<LifNeuron>(info, adj))); 
-    }
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     myNeurons.push_back(std::move(std::make_unique<LifNeuron>(info, adj))); 
+    // }
 
     // TODO: I need to fix the dependencies here. Currently it is weird for synapses to know their neyrons, and for neurons to know their synapses.
     // I feel like only one of them should know the other.

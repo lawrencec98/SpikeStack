@@ -11,6 +11,7 @@ target_sources(spikestack
     PRIVATE
         src/EventDispatcher.cpp
         src/LifNeuron.cpp
+        src/Network.cpp
         src/Synapse.cpp
     
     PUBLIC
@@ -26,6 +27,7 @@ target_sources(spikestack
             include/INeuron.hpp
             include/InputNeuron.hpp
             include/LifNeuron.hpp
+            include/Network.hpp
             include/Spike.hpp
             include/Synapse.hpp
             include/Types.hpp
