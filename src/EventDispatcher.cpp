@@ -14,6 +14,8 @@ EventDispatcher::EventDispatcher(std::shared_ptr<EventQueue<std::shared_ptr<Even
 std::shared_ptr<Event> EventDispatcher::PopFromEventQueue()
 {
     std::shared_ptr<Event> event = m_queue->PopEvent();
+
+    m_currentSimTime = event->occurence_timestamp; // simtime skips to the occurence time of popped event.
     
     ProcessEvent(event);
 }
@@ -33,6 +35,11 @@ void EventDispatcher::ProcessSpikeEvent(std::shared_ptr<Event> event)
 {
     //TODO
     // SynapseId dest_synapse = event->destination;
+
+    // std::shared_ptr<Synapse> destSynapse = network->GetSynapseById(dest_synapse);
+
+    // // destSynapse->ProcessSpike()
+
 
     // std::vector<SynapseId> dest_synapses = dest_synapse->GetPostSynapses();
 

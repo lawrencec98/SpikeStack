@@ -19,6 +19,8 @@ public:
 
     void Connect();
 
+    // std::shared_ptr<Synapse> GetSynapseById(SynapseId id);
+
 private:
     std::vector<LifNeuron> m_neuronPopulation;
     std::vector<Synapse> m_synapsePopulation;

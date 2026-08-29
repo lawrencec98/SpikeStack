@@ -40,3 +40,20 @@ void Network::AddPopulation(int size)
     //     m_neuronPopulation.push_back(LifNeuron(info, ));
     // }
 }
+
+
+void Network::Connect()
+{
+    if (m_neuronPopulation.empty() || m_synapsePopulation.empty())
+    {
+        throw std::runtime_error("Error - cannot connect empty nodes.");
+    }
+
+    //TODO: look for all-to-all network connecting algorithm.
+}
+
+
+// std::shared_ptr<Synapse> Network::GetSynapseById(SynapseId id)
+// {
+//     return m_synapsePopulation[id];
+// }
