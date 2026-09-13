@@ -30,6 +30,8 @@ private:
     std::shared_ptr<EventQueue<std::shared_ptr<Event>, EventComparator>> m_queue;
     std::vector<std::shared_ptr<INeuron>> m_neurons;
     // std::shared_ptr<Network> network; // does eventdispatcher own network?
+
+    std::mutex m_mutexSimTime;
 };
 
 

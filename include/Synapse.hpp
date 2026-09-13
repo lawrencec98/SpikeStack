@@ -44,7 +44,7 @@ public:
     NeuronId GetPostNeuron() const;
     // SynapseType GetType() const;
 private:
-    SynapseType m_type; // not sure about this one, spike and synapse probably shouldn't share teh same type
+    SynapseType m_type;
     NeuronId m_pre;
     NeuronId m_post;
     double m_weight;

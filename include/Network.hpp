@@ -3,6 +3,7 @@
 
 #include "LifNeuron.hpp"
 #include "Synapse.hpp"
+#include "Types.hpp"
 
 
 namespace spikestack {
@@ -19,7 +20,7 @@ public:
 
     void Connect();
 
-    // std::shared_ptr<Synapse> GetSynapseById(SynapseId id);
+    std::shared_ptr<Synapse> GetSynapseById(SynapseId id);
 
 private:
     std::vector<LifNeuron> m_neuronPopulation;

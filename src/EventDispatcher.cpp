@@ -48,3 +48,10 @@ void EventDispatcher::ProcessSpikeEvent(std::shared_ptr<Event> event)
     //     syn->ProcessSpike() // TODO needs spike information.
     // }
 }
+
+
+void EventDispatcher::Push(Event event)
+{
+    std::lock_guard<std::mutex> lock(m_mutexSimTime); // TODO how will other objects access this mutex??
+    event.occurence_timestamp = m_currentSimTime;
+}
