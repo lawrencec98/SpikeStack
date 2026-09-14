@@ -25,7 +25,6 @@ target_sources(spikestack
             include/EventQueue.hpp
             include/EventType.hpp
             include/INeuron.hpp
-            include/InputNeuron.hpp
             include/LifNeuron.hpp
             include/Network.hpp
             include/Spike.hpp
