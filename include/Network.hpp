@@ -9,6 +9,12 @@
 namespace spikestack {
 
 
+struct Population {
+    int start;
+    int size;
+};
+
+
 // TODO: Only supports all-to-all neuron connection for now.
 class Network 
 {
@@ -16,7 +22,7 @@ public:
     Network();
     ~Network();
 
-    void AddPopulation(int size);
+    Population AddPopulation(int size, LifNeuronInfo info);
 
     void Connect();
 
@@ -25,6 +31,11 @@ public:
 private:
     std::vector<LifNeuron> m_neuronPopulation;
     std::vector<Synapse> m_synapsePopulation;
+
+    std::vector<NeuronId> m_neuronIds;
+    std::vector<SynapseId> m_synapseIds;
+
+    std::vector<Population> m_populations;
 };
 
 

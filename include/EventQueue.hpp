@@ -30,7 +30,6 @@ public:
     EventQueue()
     :   m_queue(std::make_shared<std::priority_queue<T, std::vector<T>, Comparator>>())
     {
-        // TODO: modify so that it knows what to order by.
     }
 
     ~EventQueue()
