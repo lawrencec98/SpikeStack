@@ -16,7 +16,6 @@ struct Event
 {
     spikestack::EventType type;
     Time occurence_timestamp; // When the timestamp should occur.
-    SynapseId destination;
 };
 
 

@@ -2,7 +2,7 @@
 
 using namespace spikestack;
 
-LifNeuron::LifNeuron(LifNeuronInfo info, std::vector<SynapseId> preSynapses, std::vector<SynapseId> postSynapses)
+LifNeuron::LifNeuron(LifNeuronInfo info)
     :   m_leakageRate(info.leakageRate),
         m_timeConstant(1/m_leakageRate),
         m_vRest(info.vrest),
@@ -65,15 +65,12 @@ void LifNeuron::Fire(double current_sim_time)
     spike.delivered_time = spike.occ_time; // TODO figure out how to represent synaptic delay.
     spike.source_id = m_neuronId;
     
-    for (auto& synapseId : m_postSynapses)
-    {
-        Event event;
-        // event.occurence_timestamp = current_sim_time; // maybe remove this and let the dispatcher decide the simtime.
-        event.type = EventType::Spike;
-        event.destination = synapseId;
+    Event event;
+    // event.occurence_timestamp = current_sim_time; // maybe remove this and let the dispatcher decide the simtime.
+    event.type = EventType::Spike;
 
-        m_dispatcher->Push(event);
-    }
+    m_dispatcher->Push(event);
+    
 
     m_vInstantaneous = m_vReset;
     m_refactoryPeriodStartTime = current_sim_time;
@@ -137,16 +134,4 @@ float LifNeuron::GetVoltageMax() const
 double LifNeuron::GetVoltageRefactoryPeriod() const
 {
     return m_absoluteRefactoryPeriod;
-}
-
-
-std::vector<SynapseId> LifNeuron::GetPreSynapses() const
-{
-    return m_preSynapses;
-}
-
-
-std::vector<SynapseId> LifNeuron::GetPostSynapses() const
-{
-    return m_postSynapses;
 }

@@ -54,7 +54,7 @@ struct LifNeuronInfo
 class LifNeuron : public INeuron
 {
 public:
-    LifNeuron(LifNeuronInfo info, std::vector<SynapseId> preSynapses, std::vector<SynapseId> postSynapses);
+    LifNeuron(LifNeuronInfo info);
     LifNeuron(const LifNeuron&) = delete;
     LifNeuron& operator=(const LifNeuron&) = delete;
 
@@ -78,8 +78,6 @@ public:
     float GetVoltageMin() const;
     float GetVoltageMax() const;
     Time GetVoltageRefactoryPeriod() const;
-    std::vector<SynapseId> GetPreSynapses() const override;
-    std::vector<SynapseId> GetPostSynapses() const override;
 
 private:
     /**
@@ -109,9 +107,6 @@ private:
     const float m_vMax = 1.0; //Should this be const?
 
     const float m_vSpike = 100; //[mV]
-
-    std::vector<SynapseId> m_postSynapses;
-    std::vector<SynapseId> m_preSynapses;
 
     double m_lastSpikeTime;
 

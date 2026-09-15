@@ -19,40 +19,73 @@ Network::~Network()
 }
 
 
-void Network::AddPopulation(int size, LifNeuronInfo info)
+Population Network::AddPopulation(std::string name, int size, LifNeuronInfo info)
 {
-    int numSynapses = (size * (size - 1)) / 2;
+    // Create a population group
+    Population pop {
+        .start = m_neurons.size() - 1,
+        .size = size,
+        .name = name // User will connect populations by name.
+    };
 
-    std::vector<SynapseId> vecSynapseIds(size - 1); // Each neuron is connected to size-1 neurons.
-    std::iota(vecSynapseIds.begin(), vecSynapseIds.end(), 0); // TODO: How to know which Ids to use?
+    m_populations.push_back(pop);
 
-    // LifNeuronInfo info {};
-    // info.leakageRate = 0.25;
-    // info.absoluteRefactoryPeriod = 10;
-    // info.vSpike = 0.05;
-    // info.vmin = -1;
-    // info.vmin = 2;
-    // info.vreset = -0.65;
-    // info.vthreshold = -0.5;
 
+    // Create new neurons
     for (int i = 0; i < size; ++i)
     {
-        m_neuronPopulation.push_back(LifNeuron(info, ));
+        m_neurons.emplace_back(std::make_shared<LifNeuron>(info));
+        m_mapOutputSynapses.push_back(std::vector<SynapseId>{}); // Reserve a vector of synapses for this neuron
     }
 }
 
 
-void Network::Connect()
+void Network::Connect(std::string popName1, std::string popName2, SynapseInfo info)
 {
-    if (m_neuronPopulation.empty() || m_synapsePopulation.empty())
+    if (m_neurons.empty() || m_synapses.empty())
     {
         throw std::runtime_error("Error - cannot connect empty nodes.");
     }
 
     //TODO: look for all-to-all network connecting algorithm.
 
+    // Step 1: Find population indexes
+    Population pop1 = FindPopulationByName(popName1);
+    Population pop2 = FindPopulationByName(popName2);
+
+    // Create all-to-all connections (represented by Synapses)
+    for (int i = pop1.start; i < pop1.size; i++)
+    {
+        for (int j = pop2.start; j < pop2.size; j++)
+        {
+            // Create synapse
+            info.pre = pop1.start + i;
+            info.post = pop2.start + j;
+            m_synapses.emplace_back(std::make_shared<Synapse>(info));
+
+            // Store Neuron->Synapse mapping
+            SynapseId id = m_synapses.size() - 1;
+            m_mapOutputSynapses.at(pop1.start + i).push_back(id);
+
+            // usage would then be: Processspike(m_mapOutputSynapses[spike.src])
+        }
+    }
 }
 
+
+
+Population Network::FindPopulationByName(std::string name)
+{
+    for (const auto& pop : m_populations)
+    {
+        if (pop.name == name)
+        {
+            return pop;
+        }
+    }
+    
+    throw std::runtime_error("Error: Could not find population.");
+}
 
 // std::shared_ptr<Synapse> Network::GetSynapseById(SynapseId id)
 // {

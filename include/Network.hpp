@@ -12,6 +12,7 @@ namespace spikestack {
 struct Population {
     int start;
     int size;
+    std::string name;
 };
 
 
@@ -22,18 +23,19 @@ public:
     Network();
     ~Network();
 
-    Population AddPopulation(int size, LifNeuronInfo info);
+    Population AddPopulation(std::string name, int size, LifNeuronInfo info);
 
-    void Connect();
+    void Connect(std::string popName1, std::string popName2, SynapseInfo ifno);
 
     std::shared_ptr<Synapse> GetSynapseById(SynapseId id);
 
-private:
-    std::vector<LifNeuron> m_neuronPopulation;
-    std::vector<Synapse> m_synapsePopulation;
+    Population FindPopulationByName(std::string name);
 
-    std::vector<NeuronId> m_neuronIds;
-    std::vector<SynapseId> m_synapseIds;
+private:
+    std::vector<std::shared_ptr<INeuron>> m_neurons;
+    std::vector<std::shared_ptr<Synapse>> m_synapses;
+
+    std::vector<std::vector<SynapseId>> m_mapOutputSynapses; // This maps a neuron to its output synapses
 
     std::vector<Population> m_populations;
 };
