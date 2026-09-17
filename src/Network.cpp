@@ -24,7 +24,7 @@ void Network::AddPopulation(std::string name, int size, LifNeuronInfo info)
 {
     // Create a population group
     Population pop {
-        .start = m_neurons.size() - 1,
+        .start = (m_neurons.size() > 0) ? m_neurons.size() - 1 : 0,
         .size = size,
         .name = name // User will connect populations by name.
     };
@@ -43,7 +43,7 @@ void Network::AddPopulation(std::string name, int size, LifNeuronInfo info)
 
 void Network::Connect(std::string popName1, std::string popName2, SynapseInfo info)
 {
-    if (m_neurons.empty() || m_synapses.empty())
+    if (m_neurons.empty())
     {
         throw std::runtime_error("Error - cannot connect empty nodes.");
     }
@@ -55,9 +55,9 @@ void Network::Connect(std::string popName1, std::string popName2, SynapseInfo in
     Population pop2 = FindPopulationByName(popName2);
 
     // Create all-to-all connections (represented by Synapses)
-    for (int i = pop1.start; i < pop1.size; i++)
+    for (int i = 0; i < pop1.size; i++)
     {
-        for (int j = pop2.start; j < pop2.size; j++)
+        for (int j = 0; j < pop2.size; j++)
         {
             // Create synapse
             info.pre = pop1.start + i;
@@ -68,7 +68,7 @@ void Network::Connect(std::string popName1, std::string popName2, SynapseInfo in
             SynapseId id = m_synapses.size() - 1;
             m_mapOutputSynapses.at(pop1.start + i).push_back(id);
 
-            // usage would then be: Processspike(m_mapOutputSynapses[spike.src])
+            // m_mapOutputSynapses usage would be like: Dispatcher.ProcessSpike(m_mapOutputSynapses[spike.src])
         }
     }
 }
