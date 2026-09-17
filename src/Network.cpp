@@ -20,7 +20,7 @@ Network::~Network()
 }
 
 
-Population Network::AddPopulation(std::string name, int size, LifNeuronInfo info)
+void Network::AddPopulation(std::string name, int size, LifNeuronInfo info)
 {
     // Create a population group
     Population pop {

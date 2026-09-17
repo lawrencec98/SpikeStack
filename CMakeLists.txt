@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.2)
 
 project (SpikeStack)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 add_subdirectory("submodules/googletest")
 
 # Build config for spikestack library

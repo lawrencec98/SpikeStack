@@ -26,7 +26,7 @@ public:
     Network();
     ~Network();
 
-    Population AddPopulation(std::string name, int size, LifNeuronInfo info);
+    void AddPopulation(std::string name, int size, LifNeuronInfo info);
 
     void Connect(std::string popName1, std::string popName2, SynapseInfo ifno);
 
