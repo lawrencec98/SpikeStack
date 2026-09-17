@@ -55,3 +55,9 @@ void EventDispatcher::Push(Event event)
     std::lock_guard<std::mutex> lock(m_mutexSimTime); // TODO how will other objects access this mutex??
     event.occurence_timestamp = m_currentSimTime;
 }
+
+
+void EventDispatcher::AddNetwork(std::shared_ptr<Network> network)
+{
+    m_network = network;
+}

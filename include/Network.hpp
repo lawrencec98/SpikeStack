@@ -1,6 +1,9 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
+#include <string>
+
+
 #include "LifNeuron.hpp"
 #include "Synapse.hpp"
 #include "Types.hpp"

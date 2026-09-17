@@ -17,17 +17,12 @@ int main()
     EventDispatcher dispatcher(queue_sp);
 
     // Create a synapse population (population is only 1 in this case)
-    std::vector<Synapse> vecSynapse;
     SynapseInfo synInfo {};
     synInfo.delay = 2;
     synInfo.post = 1;
     synInfo.pre = 0;
     synInfo.type = SynapseType::excitatory;
     synInfo.weight = 0.5;
-
-    Synapse synapse1(synInfo);
-    vecSynapse.push_back(synapse1);
-
 
     // Create a population of neurons and give it the synapses
     LifNeuronInfo info {};
@@ -40,8 +35,13 @@ int main()
     info.vthreshold = -0.5;
 
 
-    std::vector<std::unique_ptr<LifNeuron>> myNeurons;
-    std::vector<float> adj;
+    std::shared_ptr<Network> network = std::make_shared<Network>();
+    dispatcher.AddNetwork(network);
+
+    dispatcher.m_network->AddPopulation("input", 10, info);
+    dispatcher.m_network->AddPopulation("output", 10, info);
+
+    dispatcher.m_network->Connect("input", "output", synInfo);
 
     // for (int i = 0; i < 3; i++)
     // {

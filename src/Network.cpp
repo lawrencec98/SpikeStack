@@ -1,6 +1,7 @@
 #include "Network.hpp"
 
 #include <numeric>
+#include <stdexcept>
 
 
 using namespace spikestack;

@@ -8,7 +8,6 @@
 #include "INeuron.hpp"
 
 #include "Event.hpp"
-#include "EventDispatcher.hpp"
 #include "Spike.hpp"
 #include "Synapse.hpp"
 #include "Types.hpp"
@@ -37,18 +36,6 @@ Output:
     - Spike ON OFF signal.
 -------------
 */
-
-struct LifNeuronInfo
-{
-    float vrest = -65.0;
-    float vthreshold = -60.0;
-    float vreset = -75.0;
-    float vmin = -1.0;
-    float vmax = 1.0;
-    float leakageRate;
-    float vSpike = 100;
-    Time absoluteRefactoryPeriod;
-};
 
 
 class LifNeuron : public INeuron
@@ -90,8 +77,6 @@ private:
      * @brief TODO: This function returns the voltage of a spike, which is determined by the spike's polarity and synaptic weight.
      */
     float CalculateSpikeVoltage(bool isPositve);
-
-    std::shared_ptr<EventDispatcher> m_dispatcher;
 
     unsigned long int m_neuronId;
 

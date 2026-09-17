@@ -67,10 +67,7 @@ void LifNeuron::Fire(double current_sim_time)
     
     Event event;
     // event.occurence_timestamp = current_sim_time; // maybe remove this and let the dispatcher decide the simtime.
-    event.type = EventType::Spike;
-
-    m_dispatcher->Push(event);
-    
+    event.type = EventType::Spike;    
 
     m_vInstantaneous = m_vReset;
     m_refactoryPeriodStartTime = current_sim_time;

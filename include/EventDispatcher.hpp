@@ -4,7 +4,7 @@
 
 #include "Event.hpp"
 #include "EventQueue.hpp"
-// #include "Network.hpp"
+#include "Network.hpp"
 #include "INeuron.hpp"
 #include "Synapse.hpp"
 
@@ -17,7 +17,12 @@ class EventDispatcher
 {
 public:
     EventDispatcher(std::shared_ptr<EventQueue<std::shared_ptr<Event>, EventComparator>> queue);
+    
     void Push(Event);
+
+    void AddNetwork(std::shared_ptr<Network> network);
+
+    std::shared_ptr<Network> m_network;
 
 private:
     std::shared_ptr<Event> PopFromEventQueue();
@@ -25,6 +30,7 @@ private:
     void ProcessEvent(std::shared_ptr<Event> event);
 
     void ProcessSpikeEvent(std::shared_ptr<Event> event);
+
     Time m_currentSimTime; // need to update this whenever we pop from the eventqueue.
 
     std::shared_ptr<EventQueue<std::shared_ptr<Event>, EventComparator>> m_queue;
