@@ -40,6 +40,10 @@ PSP decays over time, with the voltage tending towards resting - the rate of thi
 ![SpikeStack Architecture Diagram](readme_assets/SpikeStack%20Architecture%20Diagram.jpg)
 
 
+## Installation
+### Dependencies
+
+
 # Notes
 * Time units are in milliseconds.
 * Voltage units are in millivolts.
