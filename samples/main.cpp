@@ -43,24 +43,17 @@ int main()
 
     dispatcher.m_network->Connect("input", "output", synInfo);
 
-    // for (int i = 0; i < 3; i++)
+
+    // FOR LOGGING ONLY!
+    // auto synapsesVector = dispatcher.m_network->GetSynapses();
+    // int i = 1;
+    // for (const auto& syn : synapsesVector)
     // {
-    //     myNeurons.push_back(std::move(std::make_unique<LifNeuron>(info, adj))); 
+    //     int pre = syn->GetPreNeuron();
+    //     int post = syn->GetPostNeuron();
+
+    //     std::cout << "Synapse" << " i: " << pre << " " << post << std::endl;
+    //     i++;
     // }
-
-    // TODO: I need to fix the dependencies here. Currently it is weird for synapses to know their neyrons, and for neurons to know their synapses.
-    // I feel like only one of them should know the other.
-
-    // std::cout << "Hello world" << std::endl;
-
-    // /*
-    //     A  B  C  D
-    // A   0  1  1  0 
-    // B   0  0  1  0 
-    // C   1  1  0  1
-    // D   1  1  1  0   
-    
-    // */
-    // std::vector<std::vector<bool>> adjacencyMatrix;
 
 }

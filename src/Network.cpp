@@ -51,8 +51,8 @@ void Network::Connect(std::string popName1, std::string popName2, SynapseInfo in
     //TODO: look for all-to-all network connecting algorithm.
 
     // Step 1: Find population indexes
-    Population pop1 = FindPopulationByName(popName1);
-    Population pop2 = FindPopulationByName(popName2);
+    Population pop1 = FindPopulation(popName1);
+    Population pop2 = FindPopulation(popName2);
 
     // Create all-to-all connections (represented by Synapses)
     for (int i = 0; i < pop1.size; i++)
@@ -75,7 +75,7 @@ void Network::Connect(std::string popName1, std::string popName2, SynapseInfo in
 
 
 
-Population Network::FindPopulationByName(std::string name)
+Population Network::FindPopulation(std::string name)
 {
     for (const auto& pop : m_populations)
     {
@@ -86,6 +86,12 @@ Population Network::FindPopulationByName(std::string name)
     }
     
     throw std::runtime_error("Error: Could not find population.");
+}
+
+
+std::vector<std::shared_ptr<Synapse>> Network::GetSynapses() const
+{
+    return m_synapses;
 }
 
 // std::shared_ptr<Synapse> Network::GetSynapseById(SynapseId id)

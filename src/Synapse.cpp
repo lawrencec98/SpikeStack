@@ -44,3 +44,15 @@ void Synapse::ProcessSpike(std::shared_ptr<spike::Spike> spike, double current_s
         spike->weight = -1 * m_weight;
     }
 }
+
+
+NeuronId Synapse::GetPreNeuron() const
+{
+    return m_pre;
+}
+
+
+NeuronId Synapse::GetPostNeuron() const
+{
+    return m_post;
+}

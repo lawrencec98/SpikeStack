@@ -32,7 +32,9 @@ public:
 
     std::shared_ptr<Synapse> GetSynapseById(SynapseId id);
 
-    Population FindPopulationByName(std::string name);
+    Population FindPopulation(std::string name);
+
+    std::vector<std::shared_ptr<Synapse>> GetSynapses() const;
 
 private:
     std::vector<std::shared_ptr<INeuron>> m_neurons;
