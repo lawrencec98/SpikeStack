@@ -1,6 +1,7 @@
 #ifndef SPIKE_HPP
 #define SPIKE_HPP
 
+#include "Event.hpp"
 #include "Types.hpp"
 
 
@@ -23,12 +24,13 @@ struct InputSpike
     Time timestamp;
 };
 
-struct Spike
+
+struct Spike : public Event
 {
-    NeuronId source_id;
-    Time occ_time; // The point at which the neuron exceeded v_threshold.
+    spikestack::EventType type;
+    Time occurence_timestamp; // The point at which the neuron exceeded v_threshold.
     Time delivered_time; // This factors in synaptic delay.
-    double weight;
+    NeuronId src;
 };
 
 

@@ -8,6 +8,7 @@
 #include "INeuron.hpp"
 
 #include "Event.hpp"
+#include "EventDispatcher.hpp"
 #include "Spike.hpp"
 #include "Synapse.hpp"
 #include "Types.hpp"
@@ -41,7 +42,7 @@ Output:
 class LifNeuron : public INeuron
 {
 public:
-    LifNeuron(LifNeuronInfo info);
+    LifNeuron(LifNeuronInfo info, std::shared_ptr<EventDispatcher> dispatcher);
     LifNeuron(const LifNeuron&) = delete;
     LifNeuron& operator=(const LifNeuron&) = delete;
 
@@ -97,6 +98,8 @@ private:
 
     const double m_absoluteRefactoryPeriod = 2; // We are simplifying things by only implementing abs refactory period, and not relative factory periods.
     double m_refactoryPeriodStartTime;
+
+    std::shared_ptr<EventDispatcher> m_eventDispatcher;
 };
 
 

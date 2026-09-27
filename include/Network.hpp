@@ -4,7 +4,7 @@
 #include <string>
 
 
-#include "LifNeuron.hpp"
+#include "INeuron.hpp"
 #include "Synapse.hpp"
 #include "Types.hpp"
 

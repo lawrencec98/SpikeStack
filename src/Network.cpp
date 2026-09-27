@@ -35,7 +35,7 @@ void Network::AddPopulation(std::string name, int size, LifNeuronInfo info)
     // Create new neurons
     for (int i = 0; i < size; ++i)
     {
-        m_neurons.emplace_back(std::make_shared<LifNeuron>(info));
+        m_neurons.emplace_back(std::make_shared<INeuron>(info));
         m_mapOutputSynapses.push_back(std::vector<SynapseId>{}); // Reserve a vector of synapses for this neuron
     }
 }

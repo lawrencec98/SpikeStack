@@ -18,7 +18,7 @@ class EventDispatcher
 public:
     EventDispatcher(std::shared_ptr<EventQueue<std::shared_ptr<Event>, EventComparator>> queue);
     
-    void Push(Event);
+    void PushToEventQueue(Event);
 
     void AddNetwork(std::shared_ptr<Network> network);
 

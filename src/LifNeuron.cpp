@@ -2,7 +2,7 @@
 
 using namespace spikestack;
 
-LifNeuron::LifNeuron(LifNeuronInfo info)
+LifNeuron::LifNeuron(LifNeuronInfo info, std::shared_ptr<EventDispatcher> dispatcher)
     :   m_leakageRate(info.leakageRate),
         m_timeConstant(1/m_leakageRate),
         m_vRest(info.vrest),
@@ -14,7 +14,8 @@ LifNeuron::LifNeuron(LifNeuronInfo info)
         m_vInstantaneous(m_vRest), //Start off at rest
         m_lastSpikeTime(0), // Assumes that neurons are created at the start of sim, and no new ones can be created
         m_absoluteRefactoryPeriod(info.absoluteRefactoryPeriod),
-        m_refactoryPeriodStartTime(std::numeric_limits<double>::max())
+        m_refactoryPeriodStartTime(std::numeric_limits<double>::max()),
+        m_eventDispatcher(dispatcher)
 {
     //TODO add config parsing.
 
@@ -61,13 +62,11 @@ void LifNeuron::Fire(double current_sim_time)
     // recursively call Fire on itself forever.
 
     spike::Spike spike;
-    spike.occ_time = current_sim_time;
-    spike.delivered_time = spike.occ_time; // TODO figure out how to represent synaptic delay.
-    spike.source_id = m_neuronId;
-    
-    Event event;
-    // event.occurence_timestamp = current_sim_time; // maybe remove this and let the dispatcher decide the simtime.
-    event.type = EventType::Spike;    
+    spike.occurence_timestamp = current_sim_time;
+    spike.delivered_time = spike.occurence_timestamp; // This should be modified by the synapse based on synaptic delay.
+    spike.src = m_neuronId;
+
+    m_eventDispatcher->PushToEventQueue(spike);
 
     m_vInstantaneous = m_vReset;
     m_refactoryPeriodStartTime = current_sim_time;

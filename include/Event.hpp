@@ -15,7 +15,8 @@ namespace spikestack
 struct Event
 {
     spikestack::EventType type;
-    Time occurence_timestamp; // When the timestamp should occur.
+    Time occurence_timestamp;
+    NeuronId src;
 };
 
 
