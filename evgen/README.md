@@ -1,0 +1,13 @@
+# Event Generator module
+
+This module generates event data from frame-based videos.
+
+
+# Notes
+* Video to be ingested by gstreamer.
+    ** chose gstreamer because it is better than OpenCV for low latency and real-time video streaming.
+    ** potential to also add network sources.
+
+
+# Dependencies
+* gstreamer (https://gstreamer.freedesktop.org/documentation/installing/on-linux.html?gi-language=c)
