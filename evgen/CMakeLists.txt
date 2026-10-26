@@ -18,7 +18,7 @@ pkg_check_modules(OPENCV REQUIRED IMPORTED_TARGET
     opencv4
 )
 
-add_executable(videoingest src/GstVideoIngest.cpp)
+add_executable(videoingest src/GstPipeline.cpp)
 
 target_link_libraries(videoingest PRIVATE
     PkgConfig::GSTREAMER 

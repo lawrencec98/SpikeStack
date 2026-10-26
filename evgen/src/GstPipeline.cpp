@@ -1,10 +1,7 @@
 #include <iostream>
 
-#include <gst/gst.h>
 #include <gst/app/gstappsink.h>
-#include <opencv2/core.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui.hpp>
+
 
 
 // Structure to pass our h264parse element into the callback
