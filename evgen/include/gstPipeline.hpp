@@ -2,6 +2,7 @@
 #define GST_PIPELINE_HPP
 
 #include <chrono>
+#include <mutex>
 
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
@@ -10,8 +11,6 @@
 #include <opencv2/highgui.hpp>
 
 
-namespace spikestack
-{
 
 // Structure to pass our h264parse element into the callback
 struct CustomData
@@ -20,29 +19,28 @@ struct CustomData
 };
 
 
-class GstPipeline
+class gstPipeline
 {
 public:
-    /**
-     * @param [in] path - path to an video file
-     */
-    GstPipeline(std::string path);
+    // Constructor takes an input video path
+    gstPipeline(std::string path);
 
-    ~GstPipeline();
+    ~gstPipeline();
 
-    /**
-     * @brief this is a default pipeline, hardcoded and used for early testing
-     * and proof of concept.
-     */
+    // This is a default pipeline, hardcoded and used for early testing and proof of concept.
     void Run();
-    void AttachCallback(std::function<void(cv::Mat)> function);
+    
+    // Allows the user to attach callbacks to do things with the gstreamer video.
+    void AttachCallback(std::function<void(unsigned char*, long unsigned int, long unsigned int)> function);
 
 
 private: // functions
     static GstFlowReturn on_new_sample(GstAppSink *appsink, gpointer user_data);
     static void on_pad_added(GstElement *src, GstPad *new_pad, gpointer user_data);
+
 private: // members
-    std::vector<std::function<void(char*, size_t)>> m_callbacks;
+    std::mutex m_callbacks_mutex;
+    std::vector<std::function<void(unsigned char*, long unsigned int, long unsigned int)>> m_callbacks;
     std::string m_input_video_path;
 
     GstElement* m_pipeline;
@@ -56,7 +54,5 @@ private: // members
     
 };
 
-
-} //namespace spikestack
 
 #endif // GST_PIPELINE_HPP

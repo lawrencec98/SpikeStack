@@ -1,11 +1,10 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "GstPipeline.hpp"
+#include "gstPipeline.hpp"
 
-using namespace spikestack;
 
-spikestack::GstPipeline::GstPipeline(std::string path)
+gstPipeline::gstPipeline(std::string path)
 {
     gst_init(NULL, NULL); // don't want to process command line arguments
 
@@ -48,10 +47,10 @@ spikestack::GstPipeline::GstPipeline(std::string path)
     g_signal_connect(m_demux, "pad-added", G_CALLBACK(on_pad_added), &m_custom_data);
 
     // Connect on_new_sample callback to appsink.
-    g_signal_connect(m_sink, "new-sample", G_CALLBACK(on_new_sample), nullptr);
+    g_signal_connect(m_sink, "new-sample", G_CALLBACK(on_new_sample), this);
 }
 
-spikestack::GstPipeline::~GstPipeline()
+gstPipeline::~gstPipeline()
 {
     // Cleanup
     gst_element_set_state(m_pipeline, GST_STATE_NULL);
@@ -59,7 +58,7 @@ spikestack::GstPipeline::~GstPipeline()
 }
 
 // Callback to handle the dynamic pad from qtdemux
-void spikestack::GstPipeline::on_pad_added(GstElement* src, GstPad* new_pad, gpointer user_data)
+void gstPipeline::on_pad_added(GstElement* src, GstPad* new_pad, gpointer user_data)
 {
     CustomData* data = (CustomData*)user_data;
     GstPad* sink_pad = gst_element_get_static_pad(data->h264parse, "sink");
@@ -83,8 +82,10 @@ void spikestack::GstPipeline::on_pad_added(GstElement* src, GstPad* new_pad, gpo
     gst_object_unref(sink_pad);
 }
 
-GstFlowReturn spikestack::GstPipeline::on_new_sample(GstAppSink* appsink, gpointer user_data)
+GstFlowReturn gstPipeline::on_new_sample(GstAppSink* appsink, gpointer user_data)
 {
+    gstPipeline* self = static_cast<gstPipeline*>(user_data);
+
     GstSample* sample = nullptr;
     g_signal_emit_by_name(appsink, "pull-sample", &sample);
 
@@ -98,13 +99,14 @@ GstFlowReturn spikestack::GstPipeline::on_new_sample(GstAppSink* appsink, gpoint
     GstMapInfo map;
     gst_buffer_map(buf, &map, GST_MAP_READ);
 
-    // Zero-copy view of the frame. Valid only until unmap.
-    cv::Mat frame(height, width, CV_8UC3, map.data);
+    {
+        std::lock_guard<std::mutex> lock(self->m_callbacks_mutex);
 
-    cv::imshow("image", frame);
-    cv::waitKey(15);
-    // ---- your image processing here ----
-    // If you need the data beyond this callback: cv::Mat copy = frame.clone();
+        for (auto& cb : self->m_callbacks)
+        {
+            cb(map.data, height, width);
+        }
+    }
 
     gst_buffer_unmap(buf, &map);
     gst_sample_unref(sample);
@@ -112,7 +114,7 @@ GstFlowReturn spikestack::GstPipeline::on_new_sample(GstAppSink* appsink, gpoint
     return GST_FLOW_OK;
 }
 
-void spikestack::GstPipeline::Run()
+void gstPipeline::Run()
 {
     // Set to playing
     std::cout << "Starting playback..." << std::endl;
@@ -128,9 +130,29 @@ void spikestack::GstPipeline::Run()
     gst_object_unref(bus);
 }
 
+
+void gstPipeline::AttachCallback(std::function<void(unsigned char*, long unsigned int, long unsigned int)> function)
+{
+    std::lock_guard<std::mutex> lock(m_callbacks_mutex);
+
+    m_callbacks.push_back(function);
+}
+
+
+void OpenCVCallback(unsigned char* buffer, long unsigned int height, long unsigned int width)
+{
+    cv::Mat frame(height, width, CV_8UC3, buffer);
+
+    cv::imshow("image", frame);
+    cv::waitKey(15);
+}
+
+
 int main(int argc, char* argv[])
 {
-    spikestack::GstPipeline pipeline(argv[1]);
+    gstPipeline pipeline(argv[1]);
+
+    pipeline.AttachCallback(OpenCVCallback);
 
     /* Inform user about correct usage */
     if (argc < 2)
